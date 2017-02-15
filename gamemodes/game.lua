@@ -4,6 +4,7 @@ gamemode = {}
 local GUI = require 'class.PlayerGUI'
 local Mouse = require 'class.Mouse'
 
+local Map = require 'class.Map'
 local Spawn = require 'class.Spawn'
 
 local gamera = require("libraries/gamera")
@@ -64,6 +65,7 @@ function gamemode.update(dt)
   }
 
   tile_x, tile_y = Mouse:getGridPosition()
+  Map:getCellTerrain(tile_x, tile_y)
 end
 
 --input
