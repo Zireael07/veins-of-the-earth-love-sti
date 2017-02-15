@@ -5,8 +5,8 @@ module("PlayerGUI", package.seeall, class.make)
 function PlayerGUI:draw_mouse(x,y)
     love.graphics.setFont(sherwood_font)
     love.graphics.setColor(255,255,255)
-    --tile x y 14,5  is 1,1 in map coords
-    love.graphics.print((tile_x or "N/A")..", "..(tile_y or "N/A"), mouse.x+10, mouse.y)
+    love.graphics.print(mouse.x..", "..mouse.y, mouse.x+10, mouse.y)
+    love.graphics.print((tile_x or "N/A")..", "..(tile_y or "N/A"), mouse.x+20, mouse.y+30)
 end
 
 function PlayerGUI:draw_drawstats()
