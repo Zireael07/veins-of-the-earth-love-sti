@@ -7,6 +7,11 @@ function _M:init(t)
     self.y = 1
     self.image = t.image
     self.name = t.name
+    self.type = t.type
+    self.subtype = t.subtype
+    --interface stuff
+    self.faction = t.faction or "enemy"
+    self.path = nil
 end
 
 function _M:move(x, y)
@@ -47,6 +52,16 @@ function _M:canMove(x,y)
   end
 
   return true
+end
+
+function _M:moveAlongPath(path)
+  if not path or not path[2] then return end
+  local tx = path[2].x
+  local ty = path[2].y
+  print("[Actor] Moving along path", tx, ty)
+  if self:canMove(tx, ty) then
+    self:move(path[2].x, path[2].y)
+  end
 end
 
 return Actor

@@ -2,6 +2,8 @@ require 'T-Engine.class'
 
 local Actor = require 'class.Actor'
 
+local Pathfinding = require 'class.interface.Pathfinding'
+
 module("Player", package.seeall, class.inherit(Actor))
 
 function _M:init(t)
@@ -18,6 +20,22 @@ function _M:PlayerMove(dir_string)
     --print("Direction: ", dir_x, dir_y)
     end
   self:moveDir(dir_x, dir_y)
+end
+
+function _M:movetoMouse(x,y, self_x, self_y)
+  --handle clicking outside of map
+  if not x then return end
+  if not y then return end
+  
+  if x == self_x and y == self_y then print("Error: trying to move to own position") return end
+  path = Pathfinding:findPath(x, y, self_x, self_y)
+
+  print("Moving to mouse", x,y)
+  self:moveAlongPath(path)
+  --[[--update FOV
+  self:update_draw_visibility_new()
+  --finish turn
+  endTurn()]]
 end
 
 return Player

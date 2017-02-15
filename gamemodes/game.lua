@@ -87,3 +87,11 @@ function gamemode.keypressed(k, sc)
         end
     end
 end
+
+function gamemode.mousepressed(x,y,b)
+  print("Calling mousepressed",x,y,b)
+
+  if b == 1 then
+    player:movetoMouse(tile_x, tile_y, player.x, player.y)
+  end
+end
