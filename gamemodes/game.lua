@@ -2,6 +2,7 @@
 gamemode = {}
 
 local GUI = require 'class.PlayerGUI'
+local Mouse = require 'class.Mouse'
 
 local Spawn = require 'class.Spawn'
 
@@ -10,13 +11,16 @@ local gamera = require("libraries/gamera")
 
 function gamemode.load()
     --can't mobdebug here because it freezes
-    tileMap = sti("data/maps/arena_isometric.lua")
+    --tileMap = sti("data/maps/arena_isometric.lua")
+    tileMap = sti("data/maps/arena_isometric_2.lua")
 
-    player = Spawn:createPlayer(18, 9)
+    player = Spawn:createPlayer(5, 5)
 
     --set up gamera
     local w, h = tileMap.tilewidth * tileMap.width, tileMap.tileheight * tileMap.height
     camera = gamera.new(0, 0, w, h)
+
+    Mouse:init(camera)
 end
 
 function draw_tiles()
@@ -29,8 +33,8 @@ function draw_tiles()
 end
 
 function draw_GUI()
+    --mouse drawing needs to be outside of camera because reasons
     GUI:draw_mouse()
-    --GUI:draw_border_mousetile()
     GUI:draw_drawstats()
 end
 
@@ -42,13 +46,12 @@ function gamemode.draw()
     tileMap:update(dt)
     tileMap:setDrawRange(-l, -t, w, h)
     tileMap:draw()
-    
-  end)
     --tile border needs to draw under player tile
     GUI:draw_border_mousetile()
-  --drawing outside of camera to draw at invariant coords
     --draw stuff that isn't in tilemap
     draw_tiles()
+  end)
+    
     --camera independent GUI
   draw_GUI()
 end
@@ -56,14 +59,11 @@ end
 function gamemode.update(dt)
   --get mouse coords
     mouse = {
-   x = love.mouse.getX(),
-   y = love.mouse.getY()
+   x = love.mouse.getX(), 
+   y = love.mouse.getY(),
   }
-  tile_x, tile_y = tileMap:convertPixelToTile(mouse.x, mouse.y)
-  --round down
-  tile_x = math.floor(tile_x)
-  tile_y = math.floor(tile_y)
 
+  tile_x, tile_y = Mouse:getGridPosition()
 end
 
 --input
