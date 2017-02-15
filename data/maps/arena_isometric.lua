@@ -35,7 +35,7 @@ return {
   layers = {
     {
       type = "tilelayer",
-      name = "Warstwa Kafelków 1",
+      name = "Tile Layer 1",
       x = 0,
       y = 0,
       width = 10,
