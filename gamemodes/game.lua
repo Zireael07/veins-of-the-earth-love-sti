@@ -4,6 +4,7 @@ gamemode = {}
 local GUI = require 'class.PlayerGUI'
 local Mouse = require 'class.Mouse'
 
+local Area = require 'class.Area'
 local Map = require 'class.Map'
 local Spawn = require 'class.Spawn'
 
@@ -14,6 +15,10 @@ function gamemode.load()
     --can't mobdebug here because it freezes
     --tileMap = sti("data/maps/arena_isometric.lua")
     tileMap = sti("data/maps/arena_isometric_2.lua")
+    if tileMap then
+      Map:init(tileMap.width+1, tileMap.height+1)
+      Area:setup()
+    end
 
     player = Spawn:createPlayer(5, 5)
 
