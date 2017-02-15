@@ -20,6 +20,8 @@ function gamemode.load()
 end
 
 function draw_tiles()
+    --reset color
+    love.graphics.setColor(255,255,255)
     local x,y = tileMap:convertTileToPixel(player.x,player.y)
     --to draw at center of tile, not at edge
     x,y = x - tileMap.tilewidth/4, y - tileMap.tileheight/4
@@ -28,6 +30,7 @@ end
 
 function draw_GUI()
     GUI:draw_mouse()
+    --GUI:draw_border_mousetile()
     GUI:draw_drawstats()
 end
 
@@ -41,10 +44,12 @@ function gamemode.draw()
     tileMap:draw()
     
   end)
-    --drawing outside of camera to draw at invariant coords
+    --tile border needs to draw under player tile
+    GUI:draw_border_mousetile()
+  --drawing outside of camera to draw at invariant coords
     --draw stuff that isn't in tilemap
     draw_tiles()
-  --camera independent GUI
+    --camera independent GUI
   draw_GUI()
 end
 

@@ -5,6 +5,7 @@ module("PlayerGUI", package.seeall, class.make)
 function PlayerGUI:draw_mouse(x,y)
     love.graphics.setFont(sherwood_font)
     love.graphics.setColor(255,255,255)
+    --tile x y 14,5  is 1,1 in map coords
     love.graphics.print((tile_x or "N/A")..", "..(tile_y or "N/A"), mouse.x+10, mouse.y)
 end
 
@@ -19,4 +20,21 @@ function PlayerGUI:draw_drawstats()
     love.graphics.print(drawcalls, 700, 65)
 end
 
+
+function PlayerGUI:draw_border_mousetile()
+    --reset color
+    love.graphics.setColor(255, 255, 255)
+    if tile_x and tile_y then
+        love.graphics.setColor(colors.GOLD)
+        --x,y is the top of the square I'm pointing mouse at
+        local x,y = tileMap:convertTileToPixel(tile_x, tile_y)
+        local bottomx, bottomy = tileMap:convertTileToPixel(tile_x+1, tile_y+1)
+        --bottom of x-1, y is our left end
+        local leftx, lefty = tileMap:convertTileToPixel(tile_x, tile_y+1)
+        --top of x+1, y is our right end
+        local rightx, righty = tileMap:convertTileToPixel(tile_x+1, tile_y)
+        local vertices = { x,y, leftx, lefty, bottomx, bottomy, rightx, righty }
+        love.graphics.polygon('line', vertices)
+    end    
+end
 return PlayerGUI
