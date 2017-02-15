@@ -31,12 +31,22 @@ function _M:moveDir(dx, dy)
   local tx = self.x+dx
   local ty = self.y+dy
   print_to_log("[Actor] Move to", tx, ty)
-  if true then
+  if self:canMove(tx,ty) then
     self:move(tx, ty)
   else
     print("[Actor] Failed a move attempt to", tx, ty)
   end
  
+end
+
+function _M:canMove(x,y)
+  if not Map:getCellTerrain(x,y) then print("No terrain") return false
+  else
+    --blocked
+    if Map:getCellTerrain(x,y) ~= 210 then print("Terrain is not floor") return false end
+  end
+
+  return true
 end
 
 return Actor

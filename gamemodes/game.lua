@@ -65,7 +65,6 @@ function gamemode.update(dt)
   }
 
   tile_x, tile_y = Mouse:getGridPosition()
-  Map:getCellTerrain(tile_x, tile_y)
 end
 
 --input
