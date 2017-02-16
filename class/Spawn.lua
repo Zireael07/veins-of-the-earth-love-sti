@@ -1,6 +1,8 @@
 require 'T-Engine.class'
 
 local Entity = require 'class.Entity'
+local TurnManager = require 'class.interface.TurnManager'
+
 local Player = require 'class.Player'
 local NPC = require 'class.NPC'
 local Map = require 'class.Map'
@@ -19,7 +21,7 @@ function Spawn:createPlayer(x,y)
     player_temp:move(x, y)
 
     print("[Spawn] Created player at ", x,y)
-    return player_temp
+    return TurnManager:addEntity(player_temp)
 end
 
 function Spawn:createActor(x,y,id)
@@ -56,6 +58,8 @@ function Spawn:createActor(x,y,id)
       end
     end
 
+    --return actor
+    return TurnManager:addEntity(actor)
 end
 
 return Spawn

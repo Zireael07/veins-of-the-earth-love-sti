@@ -8,10 +8,17 @@ local Area = require 'class.Area'
 local Map = require 'class.Map'
 local Spawn = require 'class.Spawn'
 
+local TurnManager = require 'class.interface.TurnManager'
+
+
 local gamera = require("libraries/gamera")
 
 
 function gamemode.load()
+    --setup stuff for turn manager
+    acting_entities = {}
+    visible_actors = {}
+
     --can't mobdebug here because it freezes
     --tileMap = sti("data/maps/arena_isometric.lua")
     tileMap = sti("data/maps/arena_isometric_2.lua")
@@ -20,6 +27,7 @@ function gamemode.load()
       Area:setup()
 
       Spawn:createActor(1,1, "kobold")
+      Spawn:createActor(3,3, "kobold")
     end
 
     player = Spawn:createPlayer(5, 5)
@@ -29,6 +37,11 @@ function gamemode.load()
     camera = gamera.new(0, 0, w, h)
 
     Mouse:init(camera)
+
+    --load scheduler
+    TurnManager:init(acting_entities)
+    visible_actors = TurnManager:getVisibleActors()
+    s = TurnManager:getSchedulerClass()
 end
 
 function draw_tiles(x,y,w,h)
@@ -52,6 +65,7 @@ function draw_GUI()
     --mouse drawing needs to be outside of camera because reasons
     GUI:draw_mouse()
     GUI:draw_drawstats()
+    GUI:draw_schedule()
 end
 
 function gamemode.draw()
@@ -80,6 +94,9 @@ function gamemode.update(dt)
   }
 
   tile_x, tile_y = Mouse:getGridPosition()
+
+  rounds()
+
 end
 
 --input
@@ -104,4 +121,50 @@ function gamemode.mousepressed(x,y,b)
   if b == 1 then
     player:movetoMouse(tile_x, tile_y, player.x, player.y)
   end
+end
+
+function schedule()
+  visible_actors = {}
+  print("[GAME] Clear visible actors")
+  TurnManager:schedule()
+  visible_actors = TurnManager:getVisibleActors()
+end
+
+function rounds()
+  TurnManager:rounds()
+  schedule_curr = TurnManager:getDebugString()
+  if not schedule_curr then schedule_curr = "Something went wrong" end
+end
+
+--turn-basedness
+function player_lock()
+  player:actPlayer()
+end
+
+function game_lock()
+  game_locked = true
+  --clear log
+  --visiblelogMessages = {}
+end
+
+function game_unlock()
+  --if game_locked == false then return end
+  game_locked = false
+
+  TurnManager:unlocked()
+end
+
+function endTurn()
+  game_unlock()
+  print("[GAME] Ended our turn")
+  print_to_log("[GAME] Ended our turn")
+end
+
+function removeDead()
+  TurnManager:removeDead()
+end
+
+function setDijkstra(map)
+  --print("[GAME] Set dijkstra")
+  dijkstra = map
 end
