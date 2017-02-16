@@ -90,6 +90,35 @@ function Map:setCellActor(x, y, value)
   self.cells[x][y]:setActor(value)
 end
 
+--FOV
+function Map:isTileVisible(x,y)
+  if not Map:getCell(x,y) then return false 
+  else
+    cell = Map:getCell(x,y)
+    return cell:isVisible()
+  end
+end 
+
+function Map:setTileVisible(x,y, val)
+  if not Map:getCell(x,y) then return end
+--  print("Map:setTileVisible: ", x, y, val)
+  self.cells[x][y]:setVisible(val)
+end
+
+function Map:isTileSeen(x,y)
+  if not Map:getCell(x,y) then return false 
+  else
+    cell = Map:getCell(x,y)
+    return cell:isSeen()
+  end
+end 
+
+function Map:setTileSeen(x,y, val)
+  if not Map:getCell(x,y) then return end
+--  print("Map:setTileSeen: ", x, y, val)
+  self.cells[x][y]:setSeen(val)
+end
+
 --convert tile coords to display x,y
 function Map:tiletoLoc(x,y)
   local x,y = tileMap:convertTileToPixel(x,y)
@@ -111,5 +140,23 @@ function Map:findFreeGrid(sx, sy, radius)
       end
   end
 end
+
+function Map:findRandomStandingGrid()
+    local x, y = rng:random(1, Map:getHeight()-1), rng:random(1, Map:getWidth()-1)
+    local found_x, found_y = 0
+
+    local tries = 0
+    while Map:getCellTerrain(x,y) ~= 210 do --and tries < 1000 do
+      x, y = rng:random(1, Map:getHeight()-1), rng:random(1, Map:getWidth()-1)
+      tries = tries + 1
+    end
+    --if tries < 1000 then
+      found_x = x
+      found_y = y  
+      print("Random standing grid",x, y)
+    --end
+    return found_x, found_y
+end
+
 
 return Map

@@ -1,15 +1,39 @@
 require 'T-Engine.class'
 
 local Actor = require 'class.Actor'
+--AI
+local ActorAI = require 'class.interface.ActorAI'
 
 local Map = require 'class.Map'
 
-module("NPC", package.seeall, class.inherit(Actor))
+module("NPC", package.seeall, class.inherit(Actor, ActorAI))
 
 function NPC:init(t)
     --init inherited stuff
     Actor.init(self, t)
-    --ActorAI.init(self)
+    ActorAI.init(self)
 end
+
+function _M:act()
+    ActorAI.act(self)
+    if self:canSeePlayer() then
+        self:target(player.x, player.y)
+    else
+        self:randomTarget()
+    end
+end
+
+function _M:target(x,y)
+  dir_x, dir_y = ActorAI:target(x, y, self.x, self.y)
+  --print("[NPC] AI moving in dir", dir_x, dir_y)
+  self:moveDir(dir_x, dir_y)
+end  
+
+function _M:randomTarget()
+    x, y = Map:findRandomStandingGrid()
+    dir_x, dir_y = ActorAI:target(x, y, self.x, self.y)
+    --print("[NPC] AI moving in dir", dir_x, dir_y)
+    self:moveDir(dir_x, dir_y)
+end  
 
 return NPC
