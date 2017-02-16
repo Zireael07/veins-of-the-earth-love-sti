@@ -1,5 +1,6 @@
+--require two libraries that are absolutely crucial
 sti = require("libraries/sti")
-
+ROT=require 'libraries/rotLove/rotLove'
 
 -- LÖVE Shortcuts
 lg  = love.graphics
@@ -21,6 +22,10 @@ function load_stuff()
     load = love.filesystem.load("load.lua")
     local loaded = load()
     
+    --randomness
+    rng = ROT.RNG.Twister:new()
+    rng:randomseed()
+
     --require content tables
     require 'data/npcs'
     --require 'data/objects'
