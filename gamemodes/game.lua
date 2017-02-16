@@ -18,6 +18,8 @@ function gamemode.load()
     if tileMap then
       Map:init(tileMap.width+1, tileMap.height+1)
       Area:setup()
+
+      Spawn:createActor(1,1, "kobold")
     end
 
     player = Spawn:createPlayer(5, 5)
@@ -29,13 +31,20 @@ function gamemode.load()
     Mouse:init(camera)
 end
 
-function draw_tiles()
+function draw_tiles(x,y,w,h)
     --reset color
     love.graphics.setColor(255,255,255)
-    local x,y = tileMap:convertTileToPixel(player.x,player.y)
-    --to draw at center of tile, not at edge
-    x,y = x - tileMap.tilewidth/4, y - tileMap.tileheight/4
-    love.graphics.draw(loaded_tiles["player_tile"], x, y)
+    for x = 1, tileMap.width do
+      for y = 1, tileMap.height do
+        if Map:getCellActor(x,y) then
+          local draw_x,draw_y = Map:tiletoLoc(x,y)
+          love.graphics.draw(loaded_tiles["player_tile"], draw_x, draw_y)
+        end
+      end
+    end
+
+    local draw_x, draw_y = Map:tiletoLoc(player.x, player.y)
+    love.graphics.draw(loaded_tiles["player_tile"], draw_x, draw_y)
 end
 
 function draw_GUI()
@@ -55,7 +64,7 @@ function gamemode.draw()
     --tile border needs to draw under player tile
     GUI:draw_border_mousetile()
     --draw stuff that isn't in tilemap
-    draw_tiles()
+    draw_tiles(l,t,w,h)
   end)
     
     --camera independent GUI
