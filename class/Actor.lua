@@ -1,5 +1,7 @@
 require 'T-Engine.class'
 
+local Map = require 'class.Map'
+
 module("Actor", package.seeall, class.make)
 
 function _M:init(t)
@@ -26,6 +28,10 @@ function _M:move(x, y)
   self.old_x, self.old_y = self.x or x, self.y or y
   self.x, self.y = x, y
   print_to_log("Actor: new x,y : ", self.x, self.y)
+
+  --update map
+  Map:setCellActor(self.old_x, self.old_y, nil)
+  Map:setCellActor(x, y, self)
 end
 
 function _M:moveDir(dx, dy)
