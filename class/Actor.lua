@@ -16,6 +16,11 @@ function _M:init(t)
     self.path = nil
 end
 
+function _M:act()
+  --check if we're alive
+  if self.dead then return false end
+end
+
 function _M:move(x, y)
   if not x or not y then return end
 
