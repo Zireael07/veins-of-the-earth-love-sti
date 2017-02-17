@@ -4,10 +4,12 @@ local Map = require 'class.Map'
 
 local Faction = require 'class.Faction'
 
+local ActorInventory = require 'class.interface.ActorInventory'
+local Combat = require 'class.interface.ActorCombat'
 local ActorLife = require 'class.interface.ActorLife'
 local ActorStats = require 'class.interface.ActorStats'
 
-module("Actor", package.seeall, class.inherit(ActorLife, ActorStats))
+module("Actor", package.seeall, class.inherit(ActorInventory, Combat, ActorLife, ActorStats))
 
 function _M:init(t)
     self.x = 1
@@ -23,8 +25,14 @@ function _M:init(t)
     self.combat = { dam = {1,4} }
     self.hit_die = t.hit_die
     --init inherited stuff
+    ActorInventory.init(self, t)
     ActorLife.init(self, t)
     ActorStats.init(self, t)
+    --delayed setup
+    if self.inventory then
+      print("We have an inventory")
+      self:equipItems(self.inventory)
+    end
 end
 
 function _M:act()
@@ -69,6 +77,12 @@ end
 function _M:canMove(x,y)
   if not Map:getCellTerrain(x,y) then print("No terrain") return false
   else
+    --should call combat
+    if Map:getCellActor(x,y) then 
+      local target = Map:getCellActor(x,y)
+      self:bumpTarget(target)
+      return false 
+    end
     --blocked
     if Map:getCellTerrain(x,y) ~= 210 then print("Terrain is not floor") return false end
   end
@@ -118,6 +132,38 @@ function _M:getReactionColor(val)
   end 
 
   return color
+end
+
+function _M:bumpTarget(target)
+  --check for reaction
+  if target:reactionToward(self) < -50 then
+    self:attackTarget(target)
+  end
+end
+
+function _M:equipItems(t)
+  print("Equipping items")
+  for i, v in ipairs(t) do
+    print("Spawning item for equipment for", self.name)
+    local o
+      o = Spawn:createItem(1, 1, v.name)
+
+      if o then
+        --remove it from the 1,1 tile
+        i = o:getObjectIndex(o.x, o.y)
+        Map:setCellObjectbyIndex(o.x, o.y, nil, i)
+        if o.slot then
+          --print("Object's slot is", o.slot)
+          if self:wearObject(o, o.slot) then
+
+          print("Wearing an object", o.name)
+          else
+            self:addObject(self.INVEN_INVEN, o)
+            print("Adding object to inventory", o.name)
+          end
+        end
+      end
+  end
 end
 
 return Actor
