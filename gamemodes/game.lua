@@ -19,6 +19,10 @@ function gamemode.load()
     acting_entities = {}
     visible_actors = {}
 
+    --messages
+    logMessages = {}
+    visiblelogMessages = {}
+
     --can't mobdebug here because it freezes
     --tileMap = sti("data/maps/arena_isometric.lua")
     tileMap = sti("data/maps/arena_isometric_2.lua")
@@ -152,7 +156,7 @@ end
 function game_lock()
   game_locked = true
   --clear log
-  --visiblelogMessages = {}
+  visiblelogMessages = {}
 end
 
 function game_unlock()
@@ -170,6 +174,11 @@ end
 
 function removeDead()
   TurnManager:removeDead()
+end
+
+function logMessage(color,string)
+  table.insert(logMessages,{time=os.clock(),message={color,string}})
+  table.insert(visiblelogMessages,{time=os.clock(),message={color,string}})
 end
 
 function setDijkstra(map)
