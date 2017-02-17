@@ -23,6 +23,9 @@ function gamemode.load()
     logMessages = {}
     visiblelogMessages = {}
 
+    --dialog ID if any
+    popup_dialog = ''
+
     --can't mobdebug here because it freezes
     --tileMap = sti("data/maps/arena_isometric.lua")
     tileMap = sti("data/maps/arena_isometric_2.lua")
@@ -89,7 +92,15 @@ function draw_GUI()
     GUI:draw_schedule()
     GUI:draw_turns_order()
     GUI:draw_log_messages()
+    draw_dialogs()
 end
+
+function draw_dialogs()
+  if popup_dialog == "log" then
+    GUI:draw_log_dialog()
+  end
+end
+
 
 function gamemode.draw()
   local dt = love.timer.getDelta()
@@ -124,8 +135,15 @@ end
 
 --input
 function gamemode.keypressed(k, sc)
-  require("mobdebug").on()
-    if not player.dead then
+  --if any dialog then
+  if popup_dialog ~= '' then
+    -- escape to exit
+    if sc == "escape" then popup_dialog = '' end
+  --no dialogs
+  else
+    --for actions, check if game is locked before doing anything
+    if game_locked 
+    and not player.dead then
         if sc == "left" then
           player:PlayerMove("left")
         elseif sc == "right" then
@@ -136,6 +154,11 @@ function gamemode.keypressed(k, sc)
             player:PlayerMove("up")
         end
     end
+    --dialogs
+    if sc == 'l' then
+        popup_dialog = 'log'
+    end
+  end
 end
 
 function gamemode.mousepressed(x,y,b)
@@ -195,4 +218,17 @@ end
 function setDijkstra(map)
   --print("[GAME] Set dijkstra")
   dijkstra = map
+end
+
+function setDialog(str, init, data)
+  --clean up
+  --GUI:unload()
+  print("[GAME] set dialog")
+  popup_dialog = str
+  if data then
+    npc_chat = data
+  end
+  if init then
+    GUI:init_dialog(str)
+  end
 end

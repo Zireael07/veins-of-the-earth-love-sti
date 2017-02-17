@@ -1,6 +1,9 @@
 require 'T-Engine.class'
 
-module("PlayerGUI", package.seeall, class.make)
+--child class to govern all the dialogs
+local DialogsGUI = require "gui.DialogsGUI"
+
+module("PlayerGUI", package.seeall, class.inherit(DialogsGUI)) --class.make)
 
 function PlayerGUI:draw_mouse(x,y)
     love.graphics.setFont(sherwood_font)
