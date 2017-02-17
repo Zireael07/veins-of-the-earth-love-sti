@@ -118,9 +118,9 @@ end
 function TurnManager:getVisibleActors()
     --print("[TURN MANAGER] Getting visible actors")
     temp_actors = table.clone(entities, true)
-   for y=1, Map:getWidth()-1 do
-      for x=1, Map:getHeight()-1 do
-          if not Map:isTileSeen(x,y) and Map:getCellActor(x,y) then
+   for y=1, tileMap.width do --Map:getWidth()-1 do
+      for x=1, tileMap.height do --Map:getHeight()-1 do
+          --[[if not Map:isTileSeen(x,y) and Map:getCellActor(x,y) then
               a = Map:getCellActor(x, y)
 
               for i=#temp_actors, 1, -1 do
@@ -130,7 +130,7 @@ function TurnManager:getVisibleActors()
                   table.remove(temp_actors, i)
                 end
               end
-          end
+          end]]
       end
   end
 
