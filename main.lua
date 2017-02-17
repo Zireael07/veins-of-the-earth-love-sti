@@ -28,7 +28,7 @@ function load_stuff()
 
     --require content tables
     require 'data/npcs'
-    --require 'data/objects'
+    require 'data/objects'
     --require 'data/areas'
 
     --show menu screen

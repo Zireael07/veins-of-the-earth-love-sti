@@ -90,6 +90,41 @@ function Map:setCellActor(x, y, value)
   self.cells[x][y]:setActor(value)
 end
 
+function Map:setCellObject(x, y, value)
+  print("Map:setCellObject: ", x, y, value)
+  local i = 1
+  while self.cells[x][y]:getObject(i) do i = i + 1 end
+  self.cells[x][y]:setObject(value, i)
+  print("Object index is ", i, "val", value)
+end
+
+function Map:setCellObjectbyIndex(x,y,value, i)
+  print("Map:setCellObjectbyIndex: ", x, y, value, i)
+  self.cells[x][y]:setObject(value, i)
+end
+
+function Map:getCellObject(x,y, i)
+   local res
+  if not Map:getCell(x,y) then return nil 
+  else 
+    local cell = Map:getCell(x,y)
+    res = cell:getObject(i)
+    --if res then print("Object for cell: "..x.." "..y.." is..", res) end
+    return res
+    end
+end
+
+function Map:getCellObjects(x,y)
+     local res
+    if not Map:getCell(x,y) then return nil 
+    else 
+    local cell = Map:getCell(x,y)
+    res = cell:getObjects()
+    --if res then print("Object for cell: "..x.." "..y.." is..", res) end
+    return res
+    end
+end
+
 --FOV
 function Map:isTileVisible(x,y)
   if not Map:getCell(x,y) then return false 
