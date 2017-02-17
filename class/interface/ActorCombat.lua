@@ -48,7 +48,7 @@ function ActorCombat:attackRoll(target, weapon)
 
     if hit and d >= 20 - threat then
       -- threatened critical hit confirmation roll
-      if not (dice.roll('1d20') < ac) then
+      if not (ROT.Dice.roll('1d20') < ac) then
          crit = true
       else
           logMessage(colors.WHITE, "Critical confirmation roll failed")
