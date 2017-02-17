@@ -1,4 +1,5 @@
 local Tile = require "class.Tile"
+local Faction = require "class.Faction"
 
 --colors
 local colors = love.filesystem.load("colors.lua")
@@ -14,3 +15,8 @@ goldbox_large_font = love.graphics.newFont("fonts/Gold_Box.ttf", 16)
 --load tiles
 print_to_log("Loading tiles..")
 Tile:loadTiles()
+
+--load factions
+print_to_log("Loading factions...")
+local factions = love.filesystem.load("data/factions.lua")
+factions()
