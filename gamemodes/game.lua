@@ -50,8 +50,15 @@ function draw_tiles(x,y,w,h)
     for x = 1, tileMap.width do
       for y = 1, tileMap.height do
         if Map:getCellActor(x,y) then
-          a = Map:getCellActor(x,y)
+          local a = Map:getCellActor(x,y)
           local draw_x,draw_y = Map:tiletoLoc(x,y)
+          --attitude indicator
+          local circle_x = draw_x+0.3*tileMap.tilewidth
+          local circle_y = draw_y + tileMap.tileheight
+          Map:unitIndicatorCircle(circle_x, circle_y, a)
+
+          --reset color
+          love.graphics.setColor(255,255,255)
           love.graphics.draw(loaded_tiles[a.image], draw_x, draw_y)
         end
       end

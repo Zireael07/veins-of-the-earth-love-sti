@@ -2,6 +2,8 @@ require 'T-Engine.class'
 
 local Map = require 'class.Map'
 
+local Faction = require 'class.Faction'
+
 module("Actor", package.seeall, class.make)
 
 function _M:init(t)
@@ -73,6 +75,40 @@ function _M:moveAlongPath(path)
   if self:canMove(tx, ty) then
     self:move(path[2].x, path[2].y)
   end
+end
+
+function _M:reactionToward(target)
+  local ret = Faction:factionReaction(self.faction, target.faction)
+  --print("Actor reaction toward, ", target.name, "is: ", ret)
+  return ret
+end
+
+function _M:indicateReaction()
+  local str
+  if self:reactionToward(player) > 50 then str = "helpful"
+  elseif self:reactionToward(player) > 0 then str = "friendly"
+  elseif self:reactionToward(player) < -50 then str = "hostile"
+  elseif self:reactionToward(player) < 0 then str = "unfriendly"
+  else str = "neutral" end
+
+  return str
+end
+
+function _M:getReactionColor(val)
+  local color 
+  if val == "player" or val == "helpful" then
+    color = {0, 255, 255}
+  elseif val == "friendly" then 
+    color = {0, 255, 0}
+  elseif val == "neutral" then 
+    color = {255, 255, 0}
+  elseif val == "unfriendly" then 
+    color = {255, 119,0}
+  elseif val == "hostile" then
+    color = {255, 0, 0}
+  end 
+
+  return color
 end
 
 return Actor
