@@ -32,6 +32,8 @@ function gamemode.load()
 
       Spawn:createActor(1,1, "kobold")
       Spawn:createActor(3,3, "kobold")
+      Spawn:createItem(3,3, "studded armor")
+      Spawn:createItem(2,2, "torch")
     end
 
     player = Spawn:createPlayer(5, 5)
@@ -53,6 +55,14 @@ function draw_tiles(x,y,w,h)
     love.graphics.setColor(255,255,255)
     for x = 1, tileMap.width do
       for y = 1, tileMap.height do
+        --draw objects
+        if Map:getCellObjects(x,y) then
+          local o = Map:getCellObject(x,y,1)
+          local draw_x,draw_y = Map:tiletoLoc(x,y)
+          draw_y = draw_y + tileMap.tileheight/3
+          love.graphics.draw(loaded_tiles[o.image], draw_x, draw_y)
+        end
+        --draw actors
         if Map:getCellActor(x,y) then
           local a = Map:getCellActor(x,y)
           local draw_x,draw_y = Map:tiletoLoc(x,y)
