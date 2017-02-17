@@ -73,6 +73,7 @@ function draw_GUI()
     GUI:draw_mouse()
     GUI:draw_drawstats()
     GUI:draw_schedule()
+    GUI:draw_turns_order()
 end
 
 function gamemode.draw()

@@ -26,6 +26,37 @@ function PlayerGUI:draw_border_mousetile()
     end    
 end
 
+function PlayerGUI:draw_turns_order()
+    --reset color
+    love.graphics.setColor(255, 255, 255)
+
+    for y=1, tileMap.width do--Map:getWidth()-1 do
+        for x=1, tileMap.height do--Map:getHeight()-1 do 
+            if Map:getCellActor(x,y) then --Map:isTileSeen(x,y) and Map:getCellActor(x,y) then 
+                a = Map:getCellActor(x, y)
+                draw_x = 135
+                draw_y = 15
+
+                for i=1, #visible_actors do
+                    local item = visible_actors[i]
+                    --reset color
+                    love.graphics.setColor(255, 255, 255)
+                    love.graphics.draw(loaded_tiles[item.image], draw_x, draw_y)
+                    local col = item:getReactionColor(item:indicateReaction())
+                    love.graphics.setColor(col)
+                    love.graphics.rectangle("line", draw_x, draw_y, 32, 32)
+                    draw_x = draw_x + 40
+                end
+            end 
+        end
+    end
+    love.graphics.setColor(colors.SLATE)
+    love.graphics.rectangle("line", 130, 10, draw_x-130, 40)   
+end
+
+
+
+
 --debugging stuff
 function PlayerGUI:draw_drawstats()
     love.graphics.setFont(sherwood_font)
