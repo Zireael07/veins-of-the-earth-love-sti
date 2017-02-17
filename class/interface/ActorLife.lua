@@ -26,7 +26,7 @@ end
 
 function ActorLife:setMaxHP()
     if self.hit_die and self.hit_die > 0 then
-        self.max_hitpoints = ROT.Dice.roll(self.hit_die..'d'..self:getHPDieSize(self.type))
+        self.max_hitpoints = ROT.Dice.roll(self.hit_die..'d'..self:getHPDieSize(self.type), 3)
         --print("[ActorLife] "..self.hit_die..'d'..self:getHPDieSize(self.type).. " result "..self.max_hitpoints)
     end
 end
