@@ -4,7 +4,10 @@ local Map = require 'class.Map'
 
 local Faction = require 'class.Faction'
 
-module("Actor", package.seeall, class.make)
+local ActorLife = require 'class.interface.ActorLife'
+local ActorStats = require 'class.interface.ActorStats'
+
+module("Actor", package.seeall, class.inherit(ActorLife, ActorStats))
 
 function _M:init(t)
     self.x = 1
@@ -16,6 +19,12 @@ function _M:init(t)
     --interface stuff
     self.faction = t.faction or "enemy"
     self.path = nil
+    -- Default melee barehanded damage
+    self.combat = { dam = {1,4} }
+    self.hit_die = t.hit_die
+    --init inherited stuff
+    ActorLife.init(self, t)
+    ActorStats.init(self, t)
 end
 
 function _M:act()
