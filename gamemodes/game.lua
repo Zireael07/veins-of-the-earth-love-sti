@@ -88,6 +88,7 @@ function draw_GUI()
     GUI:draw_drawstats()
     GUI:draw_schedule()
     GUI:draw_turns_order()
+    GUI:draw_log_messages()
 end
 
 function gamemode.draw()

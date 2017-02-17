@@ -54,7 +54,29 @@ function PlayerGUI:draw_turns_order()
     love.graphics.rectangle("line", 130, 10, draw_x-130, 40)   
 end
 
+function PlayerGUI:draw_log_messages()
+    love.graphics.setFont(sherwood_font)
+    -- draw log messages
+    local height = love.graphics.getHeight()
+    local hotbar = 70
 
+    local a = 255
+    local font_h = 15
+    if #visiblelogMessages > 0 then
+        for i, message in ipairs(visiblelogMessages) do
+            local myColor = r,g,b,a
+            love.graphics.setColor(a,a,a,a)
+            love.graphics.print(message['message'], 120, 
+            height-hotbar-(font_h*5)+(font_h*i))--15*i)
+        end    
+
+        for i,message in ipairs(visiblelogMessages) do
+            if message['delete'] == true then
+                table.remove(logMessages,i)
+            end
+        end
+    end
+end
 
 
 --debugging stuff
