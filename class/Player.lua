@@ -9,6 +9,8 @@ module("Player", package.seeall, class.inherit(Actor))
 function _M:init(t)
     print("Initializing player")
     self.player = true
+    --init inherited stuff
+    Actor.init(self, t)
     self.image = "player_tile"
     self.name = "Player"
 end

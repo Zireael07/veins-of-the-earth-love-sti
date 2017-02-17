@@ -14,7 +14,8 @@ function Spawn:createPlayer(x,y)
     if x > Map:getHeight()-1 then print("X out of bounds") end
     if y > Map:getWidth()-1 then print("Y out of bounds") end
 
-    t = {}
+    t = {faction = "player",
+  }
 
     player_temp = Player.new(t)
 
