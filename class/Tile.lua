@@ -15,6 +15,9 @@ function Tile:loadTiles()
     --light
     torch = lg.newImage("gfx/tiles/object/torch.png"),
     lantern = lg.newImage("gfx/tiles/object/lantern.png"),
+
+    --ui
+    stone_bg = lg.newImage("gfx/stone_background.png"),
 }
 
     return loaded_tiles
