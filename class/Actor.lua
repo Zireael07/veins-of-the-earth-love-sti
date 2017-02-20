@@ -28,6 +28,8 @@ function _M:init(t)
     -- Default melee barehanded damage
     self.combat = { dam = {1,4} }
     self.hit_die = t.hit_die
+
+    self.inventory = t.inventory
     --init inherited stuff
     ActorInventory.init(self, t)
     ActorLife.init(self, t)

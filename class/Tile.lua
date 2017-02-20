@@ -11,6 +11,11 @@ function Tile:loadTiles()
     kobold = lg.newImage("gfx/tiles/mobiles/kobold.png"),
 
     --objects
+    --weapons
+    longsword = lg.newImage("gfx/tiles/object/longsword.png"),
+    dagger = lg.newImage("gfx/tiles/object/dagger.png"),
+    --armor
+    leather = lg.newImage("gfx/tiles/object/armor_leather.png"),
     studded = lg.newImage("gfx/tiles/object/armor_studded.png"),
     --light
     torch = lg.newImage("gfx/tiles/object/torch.png"),
