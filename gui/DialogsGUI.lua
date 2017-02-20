@@ -5,7 +5,7 @@ local UI = require "gui.UIElements"
 --various dialogs
 local CharacterCreation = require 'gui.dialogs.CharacterCreation'
 local LogDialog = require 'gui.dialogs.LogDialog'
-
+local InventoryDialog = require 'gui.dialogs.InventoryDialog'
 
 module("DialogsGUI", package.seeall, class.make)
 
@@ -20,10 +20,10 @@ function DialogsGUI:init_dialog(str)
     end
     --[[if str == "menu_dialog" then
         MenuDialog:load()
-    end
+    end]]
     if str == "inventory" then
         InventoryDialog:load()
-    end]]
+    end
 end
 
 
@@ -46,6 +46,19 @@ end
 
 function DialogsGUI:character_creation_textinput(t)
     CharacterCreation:textinput(t)
+end
+
+--inventory
+function DialogsGUI:draw_inventory(player)
+    InventoryDialog:draw(player)
+end
+
+function DialogsGUI:inventory_mouse()
+    InventoryDialog:mouse()
+end
+
+function DialogsGUI:inventory_mouse_pressed(x,y,b)
+    InventoryDialog:mouse_pressed(x,y,b)
 end
 
 --log

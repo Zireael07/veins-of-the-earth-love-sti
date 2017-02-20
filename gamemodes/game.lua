@@ -104,6 +104,8 @@ end
 function draw_dialogs(player)
   if popup_dialog == "character_creation" then
     GUI:draw_character_creation(player)
+  elseif popup_dialog == "inventory" then
+    GUI:draw_inventory(player)
   elseif popup_dialog == "log" then
     GUI:draw_log_dialog()
   end
@@ -141,6 +143,10 @@ function gamemode.update(dt)
     if popup_dialog == 'character_creation' then
       GUI:character_creation_mouse()
     end
+    if popup_dialog == 'inventory' then
+      GUI:inventory_mouse()
+    end
+
   end
 
   rounds()
@@ -154,6 +160,9 @@ function gamemode.keypressed(k, sc)
       if sc == "backspace" then
         GUI:character_creation_keypressed(k)
       end
+  end
+  if popup_dialog == "inventory" then
+      if sc == "escape" then dragged = nil end
   end
   --if any dialog then
   if popup_dialog ~= '' then
@@ -172,11 +181,15 @@ function gamemode.keypressed(k, sc)
             player:PlayerMove("down")
         elseif sc == "up" then
             player:PlayerMove("up")
+        elseif sc == "g" then
+            player:playerPickup()
         end
     end
     --dialogs
     if sc == 'l' then
         popup_dialog = 'log'
+    elseif sc == 'i' then
+        setDialog("inventory", "inventory")
     end
   end
 end
@@ -191,6 +204,9 @@ function gamemode.mousepressed(x,y,b)
     if popup_dialog == "character_creation" then
       GUI:character_creation_mouse_pressed(x,y,b)
     end
+    if popup_dialog == 'inventory' then
+      GUI:inventory_mouse_pressed(x,y,b)
+    end
   end
 end
 
@@ -201,6 +217,7 @@ function gamemode.textinput(t)
   end
 end
 
+--turns
 function schedule()
   visible_actors = {}
   print("[GAME] Clear visible actors")
