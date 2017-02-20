@@ -3,8 +3,9 @@ require 'T-Engine.class'
 local Actor = require 'class.Actor'
 
 local Pathfinding = require 'class.interface.Pathfinding'
+local ActorFOV = require 'class.interface.ActorFOV'
 
-module("Player", package.seeall, class.inherit(Actor))
+module("Player", package.seeall, class.inherit(Actor, ActorFOV))
 
 function _M:init(t)
     print("Initializing player")
