@@ -4,12 +4,16 @@ local Map = require 'class.Map'
 
 local Faction = require 'class.Faction'
 
+--needs to be req'd first
+local ActorTemporaryValues = require 'T-Engine.interface.ActorTemporaryValues'
+
 local ActorInventory = require 'class.interface.ActorInventory'
 local Combat = require 'class.interface.ActorCombat'
 local ActorLife = require 'class.interface.ActorLife'
 local ActorStats = require 'class.interface.ActorStats'
 
-module("Actor", package.seeall, class.inherit(ActorInventory, Combat, ActorLife, ActorStats))
+module("Actor", package.seeall, class.inherit(ActorTemporaryValues,
+  ActorInventory, Combat, ActorLife, ActorStats))
 
 function _M:init(t)
     self.x = 1
