@@ -19,6 +19,10 @@ function Tile:loadTiles()
     --ui
     stone_bg = lg.newImage("gfx/stone_background.png"),
 
+    --hotbar icons
+    hotbar_attack = lg.newImage("gfx/hotbar/attack.png"),
+    hotbar_skills = lg.newImage("gfx/hotbar/skills.png"),
+
     --more UI
     ui_left_arrow = lg.newImage("gfx/kenney_ui/arrowBeige_left.png"),
     ui_right_arrow = lg.newImage("gfx/kenney_ui/arrowBeige_right.png"),
