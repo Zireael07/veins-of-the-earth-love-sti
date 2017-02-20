@@ -25,10 +25,10 @@ function _M:init(t)
     --special
     self.ammo_type = t.ammo_type
     self.number_coins = t.number_coins or 0
-    --[[if t.cost then
+    if t.cost then
         --print_to_log("[OBJECT] setting value for "..t.name)
         self.cost = self:setValue((t.cost.platinum or 0), (t.cost.gold or 0), (t.cost.silver or 0), (t.cost.copper or 0))
-    end]]
+    end
 end
 
 function _M:act()
@@ -82,6 +82,61 @@ end
 
 function _M:on_prepickup(who, idx)
     print("Called on prepickup")
+end
+
+function _M:getExamineDescription()
+    if not self.desc then return "No description available" end
+    local desc = self.desc
+    desc = desc.."\n "..self:formatPrice()
+    return desc
+end
+
+--10 coppers to a silver, 20 silvers to a gold means 200 coppers to a gold
+--10 gold to a platinum means 2000 coppers to a platinum
+function _M:setValue(plat, gold, silver, copper)
+    print_to_log("[OBJECT] Setting value: plat ", plat, " gold ", gold, " silver ", silver, " copper ", copper)
+    local cost = 0
+
+    if plat > 0 then
+        cost = cost + plat*2000
+    end
+    if gold > 0 then
+        cost = cost + gold*200
+    end
+    if silver > 0 then
+        cost = cost + silver*10
+    end
+    if copper > 0 then
+        cost = cost + copper
+    end
+    print_to_log("[OBJECT] Cost is ", cost)
+    return cost
+end
+
+--Note it omits any coppers unless the price is given in coppers
+function _M:formatPrice()
+    local platinum = math.floor(self.cost/2000)
+    local gold = math.floor(self.cost/200)
+    local silver = math.floor(self.cost/10)
+
+    local plat_change = self.cost - (platinum*2000)
+    local gold_change = self.cost - (gold*200)
+    local silver_rest = self.cost - (silver*10)
+
+    local plat_rest = math.floor(plat_change/200)
+    local gold_rest = math.floor(gold_change/10)
+
+    if self.cost >= 2000 then
+        if (plat_rest or 0) > 0 then return ""..platinum.." pp "..plat_rest.." gp"
+        else return ""..platinum.." pp" end
+    elseif self.cost >= 200 then
+        if (gold_rest or 0) > 0 then return ""..gold.." gp "..gold_rest.." sp"
+        else return ""..gold.." gp" end
+    elseif self.cost > 10 then
+        if (silver_rest or 0) > 0 then return silver.." sp "..silver_rest.." cp"
+        else return silver.." sp" end
+    else return self.cost
+    end
 end
 
 return Object
