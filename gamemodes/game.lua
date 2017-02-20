@@ -1,7 +1,7 @@
 -- gamemode for LOVE to handle the game itself
 gamemode = {}
 
-local GUI = require 'class.PlayerGUI'
+local GUI = require 'gui.PlayerGUI'
 local Mouse = require 'class.Mouse'
 
 local Area = require 'class.Area'
