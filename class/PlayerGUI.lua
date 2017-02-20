@@ -1,9 +1,29 @@
 require 'T-Engine.class'
 
+--bar
+local Hotbar = require 'gui.Hotbar'
+
 --child class to govern all the dialogs
 local DialogsGUI = require "gui.DialogsGUI"
 
 module("PlayerGUI", package.seeall, class.inherit(DialogsGUI)) --class.make)
+
+function PlayerGUI:loadGUI()
+    love.graphics.setFont(goldbox_font)
+    Hotbar:load()
+end
+
+function PlayerGUI:draw_hotbar()
+    Hotbar:draw()
+end
+
+function PlayerGUI:hotbar_mouse()
+    Hotbar:mouse()
+end
+
+function PlayerGUI:hotbar_mouse_pressed(x,y,b)
+    Hotbar:mouse_pressed(x,y,b)
+end
 
 function PlayerGUI:draw_GUI(player)
     --reset color

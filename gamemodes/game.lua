@@ -26,6 +26,9 @@ function gamemode.load()
     --dialog ID if any
     popup_dialog = ''
 
+    --load GUI
+    GUI:loadGUI()
+
     --can't mobdebug here because it freezes
     --tileMap = sti("data/maps/arena_isometric.lua")
     tileMap = sti("data/maps/arena_isometric_2.lua")
@@ -93,6 +96,7 @@ function draw_GUI(player)
     --mouse drawing needs to be outside of camera because reasons
     GUI:draw_mouse()
     GUI:draw_GUI(player)
+    GUI:draw_hotbar()
     GUI:draw_drawstats()
     GUI:draw_schedule()
     GUI:draw_turns_order()
@@ -139,7 +143,12 @@ function gamemode.update(dt)
   }
 
   if popup_dialog == '' then
-    tile_x, tile_y = Mouse:getGridPosition()
+    --if not on hotbar UI
+    if mouse.x > 120 and mouse.y < (love.graphics.getHeight() - 70) then
+      tile_x, tile_y = Mouse:getGridPosition()
+    else
+      GUI:hotbar_mouse()
+    end
   else
     if popup_dialog == 'character_creation' then
       GUI:character_creation_mouse()
@@ -200,9 +209,28 @@ end
 
 function gamemode.mousepressed(x,y,b)
   print("Calling mousepressed",x,y,b)
-  if popup_dialog == ' ' then
+  if popup_dialog == '' then
     if b == 1 then
-      player:movetoMouse(tile_x, tile_y, player.x, player.y)
+      --if not on hotbar UI
+      if mouse.x > 120 and mouse.y < (love.graphics.getHeight() - 70) then
+        if not mouse_mode then
+          print("We can move to mouse")
+          player:movetoMouse(tile_x, tile_y, player.x, player.y)
+        --if we've clicked a hotbar icon
+        else
+           print("We have a mouse mode set")
+           if Map:getCellActor(tile_x, tile_y) then
+            a = Map:getCellActor(tile_x, tile_y)
+            player:archery_attack(a)
+            --nullify mouse mode
+            setMouseMode(nil)
+          end
+        end
+      else
+        print("We've pressed on hotbar")
+        GUI:hotbar_mouse_pressed(x,y,b)
+      end
+
     end
   else
     if popup_dialog == "character_creation" then
@@ -284,4 +312,8 @@ function setDialog(str, init, data)
   if init then
     GUI:init_dialog(str)
   end
+end
+
+function setMouseMode(mode)
+  mouse_mode = mode
 end
