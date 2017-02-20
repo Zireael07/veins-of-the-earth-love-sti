@@ -92,6 +92,7 @@ end
 function draw_GUI(player)
     --mouse drawing needs to be outside of camera because reasons
     GUI:draw_mouse()
+    GUI:draw_GUI(player)
     GUI:draw_drawstats()
     GUI:draw_schedule()
     GUI:draw_turns_order()
@@ -167,7 +168,8 @@ function gamemode.keypressed(k, sc)
   --if any dialog other than character creation
   if popup_dialog ~= '' and popup_dialog ~= "character_creation" then
     -- escape to exit
-    if sc == "escape" then popup_dialog = '' end
+    if sc == "escape" then popup_dialog = ''
+    return end
   --no dialogs
   else
     --for actions, check if game is locked before doing anything
@@ -186,10 +188,12 @@ function gamemode.keypressed(k, sc)
         end
     end
     --dialogs
-    if sc == 'l' then
-        popup_dialog = 'log'
-    elseif sc == 'i' then
-        setDialog("inventory", "inventory")
+    if popup_dialog ~= 'character_creation' then
+      if sc == 'l' then
+          popup_dialog = 'log'
+      elseif sc == 'i' then
+          setDialog("inventory", "inventory")
+      end
     end
   end
 end

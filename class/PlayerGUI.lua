@@ -5,6 +5,32 @@ local DialogsGUI = require "gui.DialogsGUI"
 
 module("PlayerGUI", package.seeall, class.inherit(DialogsGUI)) --class.make)
 
+function PlayerGUI:draw_GUI(player)
+    --reset color
+    love.graphics.setColor(255, 255, 255)
+    
+    local hp = player.hitpoints
+    local wounds = player.wounds
+
+    love.graphics.draw(loaded_tiles["stone_bg"], 0,0, 0, 0.25, 1)
+    love.graphics.draw(loaded_tiles["stone_bg"], 0, 320, 0, 0.25, 1)
+
+    love.graphics.setFont(goldbox_large_font)
+
+    love.graphics.setColor(255, 51, 51)
+    love.graphics.print("Endure: "..player.hitpoints, 10, 10)
+    love.graphics.print("Health: "..player.wounds, 10, 25)
+
+    --draw body
+    --[[love.graphics.setColor(colors.GREEN)
+    if player.body_parts then
+        local x = 25
+        local y = 50
+        love.graphics.draw(loaded_tiles["body_ui"], x, y)
+    end]]
+end
+
+
 function PlayerGUI:draw_mouse(x,y)
     love.graphics.setFont(sherwood_font)
     love.graphics.setColor(255,255,255)
