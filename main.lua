@@ -9,8 +9,8 @@ lg  = love.graphics
 io.stdout:setvbuf('no')
 
 do
-  require "gamefunctions"
-  require "utils"
+  require "helpers/gamefunctions"
+  require "helpers/utils"
   --create log file
     make_log_file()
     open_save()

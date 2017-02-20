@@ -3,7 +3,7 @@ local Faction = require "class.Faction"
 local ActorInventory = require "class.interface.ActorInventory"
 
 --colors
-local colors = love.filesystem.load("colors.lua")
+local colors = love.filesystem.load("helpers/colors.lua")
 colors()
 
 --load fonts
