@@ -145,6 +145,28 @@ function _M:bumpTarget(target)
   end
 end
 
+function _M:on_die(src)
+  print("[ACTOR] on_die")
+  --drop our inventory
+  local dropx, dropy = self.x, self.y
+  local invens = {}
+  for id, inven in pairs(self.inven) do
+    invens[#invens+1] = inven
+  end
+
+  for id, inven in pairs(invens) do
+    for i = #inven, 1, -1 do
+      local o = inven[i]
+      o.dropped_by = o.dropped_by or self.name
+
+      self:removeObject(inven, i)
+      Map:setCellObject(dropx, dropy, o)
+      print("[ACTOR] on death: dropped item from inventory", o.name)
+    end
+  end
+  self.inven = {}
+end
+
 function _M:equipItems(t)
   print("Equipping items")
   for i, v in ipairs(t) do
