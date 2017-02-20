@@ -154,23 +154,6 @@ function Map:setTileSeen(x,y, val)
   self.cells[x][y]:setSeen(val)
 end
 
---convert tile coords to display x,y
-function Map:tiletoLoc(x,y)
-  local x,y = tileMap:convertTileToPixel(x,y)
-  --to draw at center of tile, not at edge
-  x,y = x - tileMap.tilewidth/3, y - tileMap.tileheight/2
-  return x,y
-end
-
---display stuff
-function Map:unitIndicatorCircle(x,y, a)
-  if a then 
-    local color = a:getReactionColor(a:indicateReaction())
-    love.graphics.setColor(color)
-    love.graphics.ellipse('line', x, y, 0.3*tileMap.tilewidth, 0.19*tileMap.tileheight)
-  end
-end
-
 --helper
 function Map:findFreeGrid(sx, sy, radius)
     for y=1, Map:getWidth()-1 do

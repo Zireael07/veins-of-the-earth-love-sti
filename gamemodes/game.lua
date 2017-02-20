@@ -5,6 +5,7 @@ local GUI = require 'gui.PlayerGUI'
 local Mouse = require 'class.Mouse'
 
 local Area = require 'class.Area'
+local Display = require 'class.Display'
 local Map = require 'class.Map'
 local Spawn = require 'class.Spawn'
 
@@ -61,35 +62,7 @@ function gamemode.load()
 end
 
 function draw_tiles(x,y,w,h)
-    --reset color
-    love.graphics.setColor(255,255,255)
-    for x = 1, tileMap.width do
-      for y = 1, tileMap.height do
-        --draw objects
-        if Map:getCellObjects(x,y) then
-          local o = Map:getCellObject(x,y,1)
-          local draw_x,draw_y = Map:tiletoLoc(x,y)
-          draw_y = draw_y + tileMap.tileheight/3
-          love.graphics.draw(loaded_tiles[o.image], draw_x, draw_y)
-        end
-        --draw actors
-        if Map:getCellActor(x,y) then
-          local a = Map:getCellActor(x,y)
-          local draw_x,draw_y = Map:tiletoLoc(x,y)
-          --attitude indicator
-          local circle_x = draw_x+0.3*tileMap.tilewidth
-          local circle_y = draw_y + tileMap.tileheight
-          Map:unitIndicatorCircle(circle_x, circle_y, a)
-
-          --reset color
-          love.graphics.setColor(255,255,255)
-          love.graphics.draw(loaded_tiles[a.image], draw_x, draw_y)
-        end
-      end
-    end
-
-    local draw_x, draw_y = Map:tiletoLoc(player.x, player.y)
-    love.graphics.draw(loaded_tiles["player_tile"], draw_x, draw_y)
+    Display:draw_display(x,y,w,h)
 end
 
 function draw_GUI(player)
