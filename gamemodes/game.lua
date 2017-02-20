@@ -164,8 +164,8 @@ function gamemode.keypressed(k, sc)
   if popup_dialog == "inventory" then
       if sc == "escape" then dragged = nil end
   end
-  --if any dialog then
-  if popup_dialog ~= '' then
+  --if any dialog other than character creation
+  if popup_dialog ~= '' and popup_dialog ~= "character_creation" then
     -- escape to exit
     if sc == "escape" then popup_dialog = '' end
   --no dialogs

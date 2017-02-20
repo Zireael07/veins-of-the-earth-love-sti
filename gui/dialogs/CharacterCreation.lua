@@ -16,6 +16,8 @@ function CharacterCreation:load()
         UI:init_text_button(x,y, 50, i, r.name, function() CharacterCreation:selectRace(id) end)
         y = y + 15
     end
+
+    UI:init_text_button(450, 200, 50, "play", "PLAY", function() CharacterCreation:startPlay() end)
 end
 
 function CharacterCreation:draw(player)
@@ -273,6 +275,11 @@ function CharacterCreation:selectRace(race)
     end
 
     player.race = races[race].name
+end
+
+function CharacterCreation:startPlay()
+    print("Starting game...")
+    setDialog('')
 end
 
 --text input
