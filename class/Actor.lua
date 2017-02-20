@@ -25,6 +25,9 @@ function _M:init(t)
     --interface stuff
     self.faction = t.faction or "enemy"
     self.path = nil
+    --lighting and vision
+    self.lite = t.lite
+    self.darkvision = t.darkvision or 0
     -- Default melee barehanded damage
     self.combat = { dam = {1,4} }
     self.hit_die = t.hit_die

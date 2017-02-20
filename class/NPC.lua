@@ -16,7 +16,7 @@ end
 
 function _M:act()
     ActorAI.act(self)
-    if self:canSeePlayer() then
+    if self:reactionToward(player) < 0 and self:canSeePlayer() then
         self:target(player.x, player.y)
     else
         self:randomTarget()

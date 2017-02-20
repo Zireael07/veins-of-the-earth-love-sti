@@ -38,14 +38,14 @@ function ActorAI:getSeenActors()
   --clear
   self.seen_actors = {}
   local range = math.max(self.lite or 0, self.darkvision or 0)
-  for y=1, Map:getWidth()-1 do
-      for x=1, Map:getHeight()-1 do 
+  for y=1, tileMap.width do --Map:getWidth()-1 do
+      for x=1, tileMap.height do --Map:getHeight()-1 do 
         if utils:distance(self.x, self.y, x, y) < range then
           if Map:getCellActor(x,y) then 
             local a = Map:getCellActor(x,y)
             if a and a ~= self and not a.dead then
               self.seen_actors[#self.seen_actors+1] = a
-              --print("AI ", self.name, "can see ", a.name)
+              print("AI ", self.name, "can see ", a.name)
             end
           end
         end
