@@ -9,10 +9,24 @@ module("Player", package.seeall, class.inherit(Actor))
 function _M:init(t)
     print("Initializing player")
     self.player = true
+    self.body = t.body or {}
     --init inherited stuff
     Actor.init(self, t)
+    --boost our survivability
+    self.max_hitpoints = 20
+    self.hitpoints = 20
+    self.wounds = 20
+    --defaults
     self.image = "player_tile"
     self.name = "Player"
+    self.gender = nil
+    self.race = "Human"
+    self.money = {
+      platinum = 0,
+      gold = 0, 
+      silver = 100, 
+      copper = 0
+    }
 end
 
 function _M:actPlayer()
@@ -40,8 +54,8 @@ end
 
 function _M:movetoMouse(x,y, self_x, self_y)
   --handle clicking outside of map
-  if not x then return end
-  if not y then return end
+  if not x or x > tileMap.width then return end
+  if not y or y > tileMap.height then return end
   
   if x == self_x and y == self_y then print("Error: trying to move to own position") return end
   path = Pathfinding:findPath(x, y, self_x, self_y)
@@ -52,6 +66,32 @@ function _M:movetoMouse(x,y, self_x, self_y)
   self:update_draw_visibility_new()]]
   --finish turn
   endTurn()
+end
+
+--inventory
+function _M:playerPickup()
+  print("Player: pickup")
+    if Map:getCell(self.x,self.y):getNbObjects() > 1 then
+      --should draw pickup list
+      --for now pick all at once
+      for i, o in pairs(Map:getCell(self.x,self.y):getObjects()) do
+        self:pickupFloor(i)
+      end
+    else
+      print("We have one object to pick")
+    self:pickupFloor(1)
+    end
+end
+
+function _M:doDrop(inven, item)
+  --bugfix
+  item = tonumber(item)
+  self:dropFloor(inven, item)
+end
+
+function _M:getCoins(color)
+  if not self.money[color] then print("Specified invalid coin color", color) end
+  return self.money[color] or 0
 end
 
 return Player
