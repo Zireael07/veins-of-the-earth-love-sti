@@ -73,4 +73,15 @@ function _M:getObjectIndex(x,y)
     return res
 end
 
+function _M:getName(t)
+    t = t or {}
+    local name = self.name
+
+    return name
+end
+
+function _M:on_prepickup(who, idx)
+    print("Called on prepickup")
+end
+
 return Object
