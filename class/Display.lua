@@ -12,6 +12,19 @@ function Display:tiletoLoc(x,y)
   return x,y
 end
 
+function Display:tilePolyPoints(tile_x,tile_y)
+  --x,y is the top of the square I'm pointing mouse at
+  local x,y = tileMap:convertTileToPixel(tile_x, tile_y)
+  local bottomx, bottomy = tileMap:convertTileToPixel(tile_x+1, tile_y+1)
+  --bottom of x-1, y is our left end
+  local leftx, lefty = tileMap:convertTileToPixel(tile_x, tile_y+1)
+  --top of x+1, y is our right end
+  local rightx, righty = tileMap:convertTileToPixel(tile_x+1, tile_y)
+
+  --order dictated by drawing the polygon
+  return x,y, leftx, lefty, bottomx, bottomy, rightx, righty
+end
+
 --display stuff
 function Display:unitIndicatorCircle(x,y, a)
   if a then 
