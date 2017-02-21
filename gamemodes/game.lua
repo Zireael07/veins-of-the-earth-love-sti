@@ -87,7 +87,9 @@ function draw_GUI(player)
 end
 
 function draw_dialogs(player)
-  if popup_dialog == "character_creation" then
+  if popup_dialog == "death_dialog" then
+    GUI:draw_death_dialog()
+  elseif popup_dialog == "character_creation" then
     GUI:draw_character_creation(player)
   elseif popup_dialog == "inventory" then
     GUI:draw_inventory(player)

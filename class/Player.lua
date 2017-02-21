@@ -117,6 +117,15 @@ function _M:playerRest()
   self:restInit()
 end
 
+function _M:on_die(src)
+  --call Actor's on_die
+  Actor.on_die(self, src)
+  --lock game
+  game_lock()
+  --display dialog
+  setDialog("death_dialog")
+end
+
 --coins
 function _M:getCoins(color)
   if not self.money[color] then print("Specified invalid coin color", color) end

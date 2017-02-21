@@ -9,6 +9,7 @@ local InventoryDialog = require 'gui.dialogs.InventoryDialog'
 local ChatDialog = require 'gui.dialogs.ChatDialog'
 local CharacterSheet = require 'gui.dialogs.CharacterSheet'
 local HelpControls = require 'gui.dialogs.HelpControls'
+local DeathDialog = require 'gui.dialogs.DeathDialog'
 
 module("DialogsGUI", package.seeall, class.make)
 
@@ -88,6 +89,11 @@ end
 
 function DialogsGUI:chat_mouse_pressed(x,y,b)
     ChatDialog:mouse_pressed(x,y,b)
+end
+
+--death screen
+function DialogsGUI:draw_death_dialog()
+    DeathDialog:draw()
 end
 
 return DialogsGUI
