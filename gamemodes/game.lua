@@ -119,6 +119,7 @@ function gamemode.draw()
     GUI:draw_border_mousetile()
     --draw stuff that isn't in tilemap
     draw_tiles(l,t,w,h)
+    GUI:draw_damage_splashes()
   end)
     
     --camera independent GUI
