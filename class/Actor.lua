@@ -12,6 +12,9 @@ local Combat = require 'class.interface.ActorCombat'
 local ActorLife = require 'class.interface.ActorLife'
 local ActorStats = require 'class.interface.ActorStats'
 
+--player specific
+local Chat = require 'class.Chat'
+
 module("Actor", package.seeall, class.inherit(ActorTemporaryValues,
   ActorInventory, Combat, ActorLife, ActorStats))
 
@@ -25,14 +28,22 @@ function _M:init(t)
     --interface stuff
     self.faction = t.faction or "enemy"
     self.path = nil
+    self.inventory = t.inventory
     --lighting and vision
     self.lite = t.lite
     self.darkvision = t.darkvision or 0
     -- Default melee barehanded damage
     self.combat = { dam = {1,4} }
     self.hit_die = t.hit_die
-
-    self.inventory = t.inventory
+    --dialogue
+    self.text = t.text
+    self.convo = t.convo
+    self.languages = t.languages
+    --portrait
+    self.show_portrait = t.show_portrait or false
+    if self.show_portrait then
+      self:portraitGen()
+    end
     --init inherited stuff
     ActorInventory.init(self, t)
     ActorLife.init(self, t)
@@ -147,6 +158,14 @@ function _M:bumpTarget(target)
   --check for reaction
   if target:reactionToward(self) < -50 then
     self:attackTarget(target)
+  else
+    if self.player == true then
+      --target.emote = "Hey you!"
+      if target.convo then
+        local chat = Chat.new(target.convo, target, self)
+        chat:invoke()
+      end
+    end
   end
 end
 
@@ -194,6 +213,147 @@ function _M:equipItems(t)
           end
         end
       end
+  end
+end
+
+--languages
+function _M:getLanguages()
+  local list = {}
+
+    for i, n in pairs(self.languages) do
+        list[#list+1] = {
+            name = n
+        }
+    end
+
+  return list
+end
+
+function _M:speakLanguage(lg)
+  if type(lg) ~= "string" then return nil end
+
+  for i,t in pairs(self:getLanguages()) do
+    if t.name == lg then return true end
+  end
+  return false
+end
+
+function _M:speakSameLanguage(target)
+  for i, t in pairs(self:getLanguages()) do
+    if target:speakLanguage(t.name) then return true end
+    return false
+  end
+end
+
+--Portrait generator
+function _M:portraitGen()
+  local doll = "doll"
+
+  if self.show_portrait == true then
+
+    local base = {"dwarf", "dwarf_alt"}
+
+    if self.subtype == "drow" then
+      doll = "doll_drow"
+    elseif self.subtype == "dwarf" then
+      doll = "doll_"..rng_table(base)
+    end
+
+    self.portrait = doll
+
+    --First things first
+    local add = {}
+
+    --Now the rest of the face
+    local eyes_light = {"amber", "seablue", "seagreen", "yellow"}
+    local eyes_medium = {"green", "blue", "gray"}
+    local eyes_dark = {"black", "brown"}
+    local eyes_red = {"red", "pink"}
+
+    local eyes_dwarf = {"1", "2", "3", "4"}
+    local eyes_human = {}
+    local eyes_all = {}
+
+    local mouth = {"mouth", "mouth2"}
+
+    --Hair colors
+    local color = {"black", "black2", "brown", "gray", "red", "white"}
+    local color_choice = rng_table(color)
+
+    --Hair
+    if self.subtype == "drow" then
+      local drow_hair = {"1", "2", "3", "4"}
+      add[#add+1] = {name="drow_hair"..rng_table(drow_hair) }
+    else
+  --  elseif self.subtype == "dwarf" then
+      add[#add+1] = {name="hair_"..color_choice }
+  --  else
+    end
+
+
+    if self.subtype == "drow" then
+      add[#add+1] = {name="eyebrows_drow"}
+    else
+      add[#add+1] = {name="eyebrows_"..color_choice }
+    end
+
+    if self.subtype == "dwarf" then
+    --  table.append(eyes_dwarf, eyes_medium)
+    --  table.append(eyes_dwarf, eyes_dark)
+      add[#add+1] = {name="eyes_dwarf_"..rng_table(eyes_dwarf) }
+    elseif self.subtype == "human" then
+      table.append(eyes_human, eyes_light)
+      table.append(eyes_all, eyes_medium)
+      table.append(eyes_human, eyes_dark)
+      add[#add+1] = {name="eyes_"..rng_table(eyes_human) }
+    else
+      table.append(eyes_all, eyes_light)
+      table.append(eyes_all, eyes_medium)
+      table.append(eyes_all, eyes_dark)
+      table.append(eyes_all, eyes_red)
+      add[#add+1] = {name="eyes_"..rng_table(eyes_all) }
+    end
+
+    if self.subtype == "dwarf" then
+      add[#add+1] = {name="dwarf_nose"}
+    end
+
+    if self.subtype == "drow" then
+      add[#add+1] = {name="drow_"..rng_table(mouth) }
+    elseif self.subtype == "dwarf" then
+      add[#add+1] = {name="dwarf_"..rng_table(mouth) }
+    else
+      add[#add+1] = {name=rng_table(mouth) }
+    end
+
+
+    if self.subtype == "dwarf" then
+      add[#add+1] = {name="dwarf_beard_"..color_choice }
+    end
+
+    --Decor
+    if self.name:find("noble") then
+      add[#add+1] = {name="noble_outfit"}
+    end
+
+    if self.name:find("commoner") or self.name:find("courtesan") then
+      add[#add+1] = {name="hood_base"}
+    end
+
+    if self.name:find("shopkeeper") or self.name:find("sage") then
+      local glasses = {"1", "2"}
+      add[#add+1] = {name="glasses"..rng_table(glasses) }
+    end
+
+    if self.name:find("sage") then
+      add[#add+1] = {name="robes"}
+    end
+
+    if self.name:find("hireling") then
+      add[#add+1] = {name="armor" }
+    end
+
+    self.portrait_table = add
   end
 end
 
