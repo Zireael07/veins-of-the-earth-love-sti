@@ -9,6 +9,7 @@ local Display = require 'class.Display'
 local Map = require 'class.Map'
 local Spawn = require 'class.Spawn'
 
+local Calendar = require "T-Engine.Calendar"
 local TurnManager = require 'class.interface.TurnManager'
 
 
@@ -56,6 +57,11 @@ function gamemode.load()
     TurnManager:init(acting_entities)
     visible_actors = TurnManager:getVisibleActors()
     s = TurnManager:getSchedulerClass()
+
+    --calendar
+    calendar = Calendar.new("data/calendar", "Today is the %s %s of %s DR. The time is %02d:%02d.", 1371, 1, 11)
+    game_turn = s:getTime()
+
 
     --draw character creation
     love.timer.sleep(.5)

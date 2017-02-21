@@ -101,4 +101,29 @@ function table.mergeAppendArray(dst, src, deep, k_skip, k_skip_deep, addnumbers)
     return table.merge(dst, src, deep, k_skip, k_skip_deep, addnumbers)
 end
 
+function string.capitalize(str)
+    if #str > 1 then
+        return string.upper(str:sub(1, 1))..str:sub(2)
+    elseif #str == 1 then
+        return str:upper()
+    else
+        return str
+    end
+end
+
+--necessary for calendar
+function string.ordinal(number)
+    local suffix = "th"
+    number = tonumber(number)
+    local base = number % 10
+    if base == 1 then
+        suffix = "st"
+    elseif base == 2 then
+        suffix = "nd"
+    elseif base == 3 then
+        suffix = "rd"
+    end
+    return number..suffix
+end
+
 return utils
