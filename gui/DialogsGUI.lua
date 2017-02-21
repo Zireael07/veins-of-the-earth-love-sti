@@ -6,6 +6,7 @@ local UI = require "gui.UIElements"
 local CharacterCreation = require 'gui.dialogs.CharacterCreation'
 local LogDialog = require 'gui.dialogs.LogDialog'
 local InventoryDialog = require 'gui.dialogs.InventoryDialog'
+local ChatDialog = require 'gui.dialogs.ChatDialog'
 
 module("DialogsGUI", package.seeall, class.make)
 
@@ -64,6 +65,19 @@ end
 --log
 function DialogsGUI:draw_log_dialog()
     LogDialog:draw()
+end
+
+--NPC chat screen
+function DialogsGUI:draw_chat(npc_chat)
+    ChatDialog:draw(npc_chat.chat, npc_chat.id)
+end
+
+function DialogsGUI:chat_mouse()
+    ChatDialog:mouse()
+end
+
+function DialogsGUI:chat_mouse_pressed(x,y,b)
+    ChatDialog:mouse_pressed(x,y,b)
 end
 
 return DialogsGUI

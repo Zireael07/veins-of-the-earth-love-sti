@@ -39,6 +39,7 @@ function gamemode.load()
 
       Spawn:createActor(1,1, "kobold")
       Spawn:createActor(3,3, "kobold")
+      Spawn:createActor(7,7, "human")
       Spawn:createItem(3,3, "studded armor")
       Spawn:createItem(2,2, "torch")
     end
@@ -86,6 +87,8 @@ function draw_dialogs(player)
     GUI:draw_inventory(player)
   elseif popup_dialog == "log" then
     GUI:draw_log_dialog()
+  elseif popup_dialog == "chat" then
+    GUI:draw_chat(npc_chat)
   end
 end
 
@@ -128,6 +131,9 @@ function gamemode.update(dt)
     end
     if popup_dialog == 'inventory' then
       GUI:inventory_mouse()
+    end
+    if popup_dialog == "chat" then
+      GUI:chat_mouse()
     end
 
   end
@@ -211,6 +217,9 @@ function gamemode.mousepressed(x,y,b)
     end
     if popup_dialog == 'inventory' then
       GUI:inventory_mouse_pressed(x,y,b)
+    end
+    if popup_dialog == "chat" then
+      GUI:chat_mouse_pressed(x,y,b)
     end
   end
 end
