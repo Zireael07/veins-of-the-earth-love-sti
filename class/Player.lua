@@ -95,4 +95,10 @@ function _M:getCoins(color)
   return self.money[color] or 0
 end
 
+function _M:incMoney(color, val)
+  if not self.money[color] then print("Specified invalid coin color", color) end
+  self.money[color] = (self.money[color] or 0) + val
+  print("Increased money ", color, "by ", val)
+end
+
 return Player
