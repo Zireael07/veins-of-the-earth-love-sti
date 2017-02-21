@@ -110,18 +110,20 @@ function PlayerGUI:draw_log_messages()
 
     local a = 255
     local font_h = 15
-    if #visiblelogMessages > 0 then
-        for i, message in ipairs(visiblelogMessages) do
+    local i2 = #logMessages
+    local i1 = i2-5
+    i1 = math.max(1, i1+1)
+
+    if #logMessages > 0 then
+        --for i, message in ipairs(visiblelogMessages) do
+        for i = i1, i2 do
+            local off = -(i2 - i)
             local myColor = r,g,b,a
             love.graphics.setColor(a,a,a,a)
-            love.graphics.print(message['message'], 120, 
-            height-hotbar-(font_h*5)+(font_h*i))--15*i)
-        end    
-
-        for i,message in ipairs(visiblelogMessages) do
-            if message['delete'] == true then
-                table.remove(logMessages,i)
-            end
+            local y = height-hotbar-(font_h*2)+(font_h*off)
+            love.graphics.print(logMessages[i]['message'], 120, y)
+            --love.graphics.print(message['message'], 120, 
+            --height-hotbar-(font_h*5)+(font_h*i))--15*i)
         end
     end
 end

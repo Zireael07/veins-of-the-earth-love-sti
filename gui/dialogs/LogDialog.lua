@@ -21,7 +21,7 @@ function LogDialog:draw()
     local i1 = i2-lines_num
     i1 = math.max(1, i1+1)
 
-    print("i1 = " .. i1 .. ", i2 = " .. i2)
+    --print("i1 = " .. i1 .. ", i2 = " .. i2)
 
     local a = 255
     --messages
