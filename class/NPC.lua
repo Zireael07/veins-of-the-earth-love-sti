@@ -5,6 +5,7 @@ local Actor = require 'class.Actor'
 local ActorAI = require 'class.interface.ActorAI'
 
 local Map = require 'class.Map'
+local Treasure = require 'class.Treasure'
 
 module("NPC", package.seeall, class.inherit(Actor, ActorAI))
 
@@ -35,5 +36,19 @@ function _M:randomTarget()
     --print("[NPC] AI moving in dir", dir_x, dir_y)
     self:moveDir(dir_x, dir_y)
 end  
+
+function _M:on_die(src)
+    Actor.on_die(self, src)
+    print("[NPC] on die")
+    --gen treasure
+    self:spawnTreasure(1)
+end
+
+function _M:spawnTreasure(lvl)
+    treasure = Treasure:selectTreasure(lvl)
+    if treasure then
+        Spawn:createItem(self.x, self.y, treasure)
+    end
+end
 
 return NPC
