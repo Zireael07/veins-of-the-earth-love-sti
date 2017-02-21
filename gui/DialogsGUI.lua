@@ -7,6 +7,8 @@ local CharacterCreation = require 'gui.dialogs.CharacterCreation'
 local LogDialog = require 'gui.dialogs.LogDialog'
 local InventoryDialog = require 'gui.dialogs.InventoryDialog'
 local ChatDialog = require 'gui.dialogs.ChatDialog'
+local CharacterSheet = require 'gui.dialogs.CharacterSheet'
+local HelpControls = require 'gui.dialogs.HelpControls'
 
 module("DialogsGUI", package.seeall, class.make)
 
@@ -60,6 +62,14 @@ end
 
 function DialogsGUI:inventory_mouse_pressed(x,y,b)
     InventoryDialog:mouse_pressed(x,y,b)
+end
+
+function DialogsGUI:draw_character_sheet(player)
+    CharacterSheet:draw(player)
+end
+
+function DialogsGUI:draw_help_controls()
+    HelpControls:draw()
 end
 
 --log

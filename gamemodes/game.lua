@@ -95,6 +95,10 @@ function draw_dialogs(player)
     GUI:draw_log_dialog()
   elseif popup_dialog == "chat" then
     GUI:draw_chat(npc_chat)
+  elseif popup_dialog == "character_sheet" then
+    GUI:draw_character_sheet(player)
+  elseif popup_dialog == "help_controls" then
+    GUI:draw_help_controls()
   end
 end
 
@@ -150,6 +154,7 @@ end
 
 --input
 function gamemode.keypressed(k, sc)
+  local shift = (love.keyboard.isScancodeDown("lshift") or love.keyboard.isScancodeDown("rshift"))
   --if dialog
   if popup_dialog == "character_creation" then
       if sc == "backspace" then
@@ -186,9 +191,13 @@ function gamemode.keypressed(k, sc)
     --dialogs
     if popup_dialog ~= 'character_creation' then
       if sc == 'l' then
-          popup_dialog = 'log'
+        popup_dialog = 'log'
+      elseif sc == 'c' then
+        popup_dialog = "character_sheet"
+      elseif sc == "/" and shift then
+        popup_dialog = "help_controls"
       elseif sc == 'i' then
-          setDialog("inventory", "inventory")
+        setDialog("inventory", "inventory")
       end
     end
   end
