@@ -50,6 +50,8 @@ function _M:PlayerMove(dir_string)
     --print("Direction: ", dir_x, dir_y)
     end
   self:moveDir(dir_x, dir_y)
+  --update FOV
+  self:update_draw_visibility_new()
   --finish turn
   endTurn()
 end
@@ -64,8 +66,8 @@ function _M:movetoMouse(x,y, self_x, self_y)
 
   print("Moving to mouse", x,y)
   self:moveAlongPath(path)
-  --[[--update FOV
-  self:update_draw_visibility_new()]]
+  --update FOV
+  self:update_draw_visibility_new()
   --finish turn
   endTurn()
 end
