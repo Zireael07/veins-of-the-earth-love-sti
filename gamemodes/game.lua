@@ -89,6 +89,8 @@ end
 function draw_dialogs(player)
   if popup_dialog == "death_dialog" then
     GUI:draw_death_dialog()
+  elseif popup_dialog == "menu_dialog" then
+    GUI:draw_menu_dialog()
   elseif popup_dialog == "character_creation" then
     GUI:draw_character_creation(player)
   elseif popup_dialog == "inventory" then
@@ -141,6 +143,9 @@ function gamemode.update(dt)
     if popup_dialog == 'character_creation' then
       GUI:character_creation_mouse()
     end
+    if popup_dialog == "menu_dialog" then
+      GUI:menu_dialog_mouse()
+    end
     if popup_dialog == 'inventory' then
       GUI:inventory_mouse()
     end
@@ -192,7 +197,9 @@ function gamemode.keypressed(k, sc)
     end
     --dialogs
     if popup_dialog ~= 'character_creation' then
-      if sc == 'l' then
+      if sc == "escape" then
+        setDialog("menu_dialog", "menu_dialog")
+      elseif sc == 'l' then
         popup_dialog = 'log'
       elseif sc == 'c' then
         popup_dialog = "character_sheet"
@@ -233,6 +240,9 @@ function gamemode.mousepressed(x,y,b)
   else
     if popup_dialog == "character_creation" then
       GUI:character_creation_mouse_pressed(x,y,b)
+    end
+    if popup_dialog == "menu_dialog" then
+      GUI:menu_dialog_mouse_pressed(x,y,b)
     end
     if popup_dialog == 'inventory' then
       GUI:inventory_mouse_pressed(x,y,b)

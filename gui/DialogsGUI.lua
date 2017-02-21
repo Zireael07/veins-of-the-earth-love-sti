@@ -9,6 +9,7 @@ local InventoryDialog = require 'gui.dialogs.InventoryDialog'
 local ChatDialog = require 'gui.dialogs.ChatDialog'
 local CharacterSheet = require 'gui.dialogs.CharacterSheet'
 local HelpControls = require 'gui.dialogs.HelpControls'
+local MenuDialog = require 'gui.dialogs.MenuDialog'
 local DeathDialog = require 'gui.dialogs.DeathDialog'
 
 module("DialogsGUI", package.seeall, class.make)
@@ -22,9 +23,9 @@ function DialogsGUI:init_dialog(str)
     if str == "character_creation" then
         CharacterCreation:load()
     end
-    --[[if str == "menu_dialog" then
+    if str == "menu_dialog" then
         MenuDialog:load()
-    end]]
+    end
     if str == "inventory" then
         InventoryDialog:load()
     end
@@ -89,6 +90,19 @@ end
 
 function DialogsGUI:chat_mouse_pressed(x,y,b)
     ChatDialog:mouse_pressed(x,y,b)
+end
+
+--menu
+function DialogsGUI:draw_menu_dialog()
+    MenuDialog:draw()
+end
+
+function DialogsGUI:menu_dialog_mouse()
+    MenuDialog:mouse()
+end
+
+function DialogsGUI:menu_dialog_mouse_pressed(x,y,b)
+    MenuDialog:mouse_pressed(x,y,b)
 end
 
 --death screen
