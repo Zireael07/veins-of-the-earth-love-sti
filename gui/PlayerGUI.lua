@@ -147,6 +147,10 @@ function PlayerGUI:draw_damage_splashes()
                     --reset color
                     love.graphics.setColor(255, 255, 255)
                     love.graphics.print(a.damage_taken, pixel_x+0.2*tileMap.tilewidth, pixel_y)
+                elseif a.no_damage then
+                    local pixel_x, pixel_y = PlayerGUI:tiletosplash(x,y)
+                    love.graphics.setColor(255,255, 255)
+                    love.graphics.draw(loaded_tiles["shield_tile"], pixel_x, pixel_y)
                 end
             end
         end

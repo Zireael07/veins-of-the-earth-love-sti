@@ -57,6 +57,9 @@ function ActorCombat:attackRoll(target, weapon)
 
     if hit then
         self:dealDamage(target, weapon, crit)
+    else
+      --set flag for splashes
+      target.no_damage = true
     end
 end
 

@@ -32,6 +32,7 @@ function Tile:loadTiles()
     stone_bg = lg.newImage("gfx/stone_background.png"),
     --effect
     damage_tile = lg.newImage("gfx/splash_gray.png"),
+    shield_tile = lg.newImage("gfx/splash_shield.png"),
 
     --hotbar icons
     hotbar_attack = lg.newImage("gfx/hotbar/attack.png"),
