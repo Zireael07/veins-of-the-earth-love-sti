@@ -179,6 +179,8 @@ function gamemode.keypressed(k, sc)
             player:PlayerMove("up")
         elseif sc == "g" then
             player:playerPickup()
+        elseif sc == "r" then
+            player:playerRest()
         end
     end
     --dialogs

@@ -4,8 +4,9 @@ local Actor = require 'class.Actor'
 
 local Pathfinding = require 'class.interface.Pathfinding'
 local ActorFOV = require 'class.interface.ActorFOV'
+local PlayerRest = require 'class.interface.PlayerRest'
 
-module("Player", package.seeall, class.inherit(Actor, ActorFOV))
+module("Player", package.seeall, class.inherit(Actor, ActorFOV, PlayerRest))
 
 function _M:init(t)
     print("Initializing player")
@@ -34,12 +35,12 @@ function _M:actPlayer()
   --print("[Player] act")
   
   --check for resting
-  --[[if self:restStep() then
+  if self:restStep() then
     --print("Player: Rest step")
     endTurn()
-  else]]
+  else
     game_lock()
-  --end
+  end
 end
 
 function _M:PlayerMove(dir_string)
@@ -90,6 +91,33 @@ function _M:doDrop(inven, item)
   self:dropFloor(inven, item)
 end
 
+--resting
+function _M:spotHostiles()
+  print("Player: checking for hostiles")
+  local seen = false
+
+  for y=1, Map:getWidth()-1 do
+      for x=1, Map:getHeight()-1 do 
+        if utils:distance(self.x, self.y, x, y) < 8 then
+          if Map:getCellActor(x,y) then 
+            local a = Map:getCellActor(x,y)
+            if a and self:reactionToward(a) < -50 and Map:isTileVisible(x,y) then
+              seen = true
+              print("[Player] Spotted hostiles")
+            end
+          end
+        end
+      end
+  end
+
+  return seen
+end
+
+function _M:playerRest()
+  self:restInit()
+end
+
+--coins
 function _M:getCoins(color)
   if not self.money[color] then print("Specified invalid coin color", color) end
   return self.money[color] or 0
@@ -100,5 +128,7 @@ function _M:incMoney(color, val)
   self.money[color] = (self.money[color] or 0) + val
   print("Increased money ", color, "by ", val)
 end
+
+
 
 return Player
