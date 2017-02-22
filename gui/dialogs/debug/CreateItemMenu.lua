@@ -3,16 +3,16 @@ require 'T-Engine.class'
 local UI = require "UIElements"
 
 local Spawn = require "class.Spawn"
+local Ego = require "class.Ego"
 
 module("CreateItemMenu", package.seeall, class.make)
 
 function CreateItemMenu:load()
     local x = 210
-    local y = 150
+    local y = 160
     local w = 60
     local list_types = {}
     list_types = CreateItemMenu:generateCategories()
-    --local list = {}
 
     for i,e in ipairs(list_types) do
         UI:init_text_button(x,y,w, e.name, e.name:capitalize(), function() CreateItemMenu:categorySelect(e.name) end)
@@ -26,10 +26,17 @@ function CreateItemMenu:draw()
     love.graphics.draw(loaded_tiles["stone_bg"], 200, 100)
 
     love.graphics.setColor(255, 255, 102)
-    love.graphics.print("CREATE ITEM", 210, 120)
+    love.graphics.print("CREATE ITEM", 210, 110)
 
     love.graphics.setColor(colors.GOLD)
-    love.graphics.line(200, 140, 550, 140)
+    love.graphics.line(200, 130, 350, 130)
+
+    love.graphics.print("Type", 210, 140)
+    love.graphics.print("Item", 280, 140)
+    love.graphics.print("Ego", 410, 140)
+
+    love.graphics.setColor(colors.GOLD)
+    love.graphics.line(200, 160, 550, 160)
 
     UI:draw(button)
 end
@@ -67,8 +74,11 @@ function CreateItemMenu:categorySelect(type)
     --print("Selected category is ", type)
     list = CreateItemMenu:generateItems(type)
 
+    list_egos = Ego:getEgosForType(type)
+
+    --draw list of items
     local x = 280
-    local y = 150
+    local y = 160
     local w = 60
     for i,e in ipairs(list) do
         if e.name then
@@ -76,6 +86,18 @@ function CreateItemMenu:categorySelect(type)
             y = y + 15
         end
     end
+
+    --draw list of egos
+    local x = 410
+    local y = 160
+    local w = 60
+    for i,e in ipairs(list_egos) do
+        if e.name then
+            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), function() print("Ego is ", e.name) end)
+            y = y + 15
+        end
+    end
+
 end
 
 function CreateItemMenu:generateItems(type)
