@@ -39,6 +39,15 @@ function CreateItemMenu:draw()
     love.graphics.line(200, 160, 550, 160)
 
     UI:draw(button)
+
+    if sel_item then
+        love.graphics.setColor(colors.GREEN)
+        love.graphics.print(sel_item.name, 280, 400)
+    end
+    if sel_ego then
+        love.graphics.setColor(colors.LIGHT_GREEN)
+        love.graphics.print(sel_ego.name, 410, 400)
+    end
 end
 
 function CreateItemMenu:mouse()
@@ -46,7 +55,7 @@ function CreateItemMenu:mouse()
 end
 
 function CreateItemMenu:mouse_pressed(x,y,b)
-    if mouse.x > 500 or mouse.y < 100 then return end
+    if mouse.x > 600 or mouse.y < 100 then return end
     UI:mouse_pressed(x,y,b)
 end
 
@@ -82,7 +91,7 @@ function CreateItemMenu:categorySelect(type)
     local w = 60
     for i,e in ipairs(list) do
         if e.name then
-            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), function() CreateItemMenu:create(e.data, e.key) end)
+            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), function() CreateItemMenu:selectItem(e.data, e.key) end)
             y = y + 15
         end
     end
@@ -93,11 +102,13 @@ function CreateItemMenu:categorySelect(type)
     local w = 60
     for i,e in ipairs(list_egos) do
         if e.name then
-            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), function() print("Ego is ", e.name) end)
+            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), function() CreateItemMenu:selectEgo(e.data) end)
             y = y + 15
         end
     end
 
+    --button
+    UI:init_text_button(500, 400, 40, "create", "Create!", function() CreateItemMenu:create(sel_item) end)
 end
 
 function CreateItemMenu:generateItems(type)
@@ -114,15 +125,28 @@ function CreateItemMenu:generateItems(type)
     return list
 end
 
+function CreateItemMenu:selectItem(data, key)
+    print("Selecting "..data.name)
+    sel_item = data
+end
+
+function CreateItemMenu:selectEgo(data)
+    print("Ego is ", data.name)
+    sel_ego = data
+end
+
 function CreateItemMenu:create(data, key)
     --make sure we have the tile for what we want to spawn
     if loaded_tiles[data.image] then
-        Spawn:createItem(player.x, player.y, key)
-        print("Spawning... "..key)
+        --data.name MUST equal the key for it to be reliable
+        Spawn:createItem(player.x, player.y, data.name)
+        print("Spawning... "..data.name)
     else
         print("We're missing a tile for "..data.name)
     end
     --print("Clicked option: "..data.name.. " key "..key)
+    --close the dialog
+    setDialog('')
 end
 
 return CreateItemMenu
