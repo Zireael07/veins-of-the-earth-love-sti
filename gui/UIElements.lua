@@ -65,7 +65,7 @@ function UIElements:mouse_pressed(x,y,b)
     if b == 1 then
         for i,e in ipairs(element) do
             local width = e.w or 20
-            local height = 20 
+            local height = 15
             if e.inventory then width = 42 height = 42 end
 
             if x > e.x and x < e.x + width then

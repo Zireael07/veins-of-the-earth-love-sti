@@ -5,8 +5,8 @@ local UI = require "UIElements"
 module("DebugMenu", package.seeall, class.make)
 
 function DebugMenu:load()
-    UI:init_text_button(210, 150, 40, "summon", "Create NPC", function() setDialog("summon_npc_debug", true) end)
-    UI:init_text_button(210, 170, 60, "create", "Create Item", function() setDialog("create_item_debug", true) end)
+    UI:init_text_button(280, 150, 40, "summon", "Create NPC", function() setDialog("summon_npc_debug", true) end)
+    UI:init_text_button(280, 170, 40, "create", "Create Item", function() setDialog("create_item_debug", true) end)
 end
 
 function DebugMenu:draw()
