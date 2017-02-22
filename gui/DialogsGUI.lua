@@ -9,7 +9,12 @@ local InventoryDialog = require 'gui.dialogs.InventoryDialog'
 local ChatDialog = require 'gui.dialogs.ChatDialog'
 local CharacterSheet = require 'gui.dialogs.CharacterSheet'
 local HelpControls = require 'gui.dialogs.HelpControls'
+--in game menu
 local MenuDialog = require 'gui.dialogs.MenuDialog'
+--debug
+local DebugMenu = require 'gui.dialogs.debug.DebugMenu'
+local SummonNPCMenu = require 'gui.dialogs.debug.SummonNPCMenu'
+--death screen
 local DeathDialog = require 'gui.dialogs.DeathDialog'
 
 module("DialogsGUI", package.seeall, class.make)
@@ -25,6 +30,12 @@ function DialogsGUI:init_dialog(str)
     end
     if str == "menu_dialog" then
         MenuDialog:load()
+    end
+    if str == "debug_menu" then
+        DebugMenu:load()
+    end
+    if str == "summon_npc_debug" then
+        SummonNPCMenu:load()
     end
     if str == "inventory" then
         InventoryDialog:load()
@@ -103,6 +114,31 @@ end
 
 function DialogsGUI:menu_dialog_mouse_pressed(x,y,b)
     MenuDialog:mouse_pressed(x,y,b)
+end
+
+--debug
+function DialogsGUI:draw_debug_dialog()
+    DebugMenu:draw()
+end
+
+function DialogsGUI:debug_menu_mouse()
+    DebugMenu:mouse()
+end
+
+function DialogsGUI:debug_menu_mouse_pressed(x,y,b)
+    DebugMenu:mouse_pressed(x,y,b)
+end
+
+function DialogsGUI:draw_summonnpc_dialog()
+    SummonNPCMenu:draw()
+end
+
+function DialogsGUI:summonnpc_menu_mouse()
+    SummonNPCMenu:mouse()
+end
+
+function DialogsGUI:summonnpc_menu_mouse_pressed(x,y,b)
+    SummonNPCMenu:mouse_pressed(x,y,b)
 end
 
 --death screen

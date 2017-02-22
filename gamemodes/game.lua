@@ -91,6 +91,10 @@ function draw_dialogs(player)
     GUI:draw_death_dialog()
   elseif popup_dialog == "menu_dialog" then
     GUI:draw_menu_dialog()
+  elseif popup_dialog == "debug_menu" then
+    GUI:draw_debug_dialog()
+  elseif popup_dialog == "summon_npc_debug" then
+    GUI:draw_summonnpc_dialog()
   elseif popup_dialog == "character_creation" then
     GUI:draw_character_creation(player)
   elseif popup_dialog == "inventory" then
@@ -146,6 +150,12 @@ function gamemode.update(dt)
     end
     if popup_dialog == "menu_dialog" then
       GUI:menu_dialog_mouse()
+    end
+    if popup_dialog == "debug_menu" then
+      GUI:debug_menu_mouse()
+    end
+    if popup_dialog == "summon_npc_debug" then
+      GUI:summonnpc_menu_mouse()
     end
     if popup_dialog == 'inventory' then
       GUI:inventory_mouse()
@@ -244,6 +254,12 @@ function gamemode.mousepressed(x,y,b)
     end
     if popup_dialog == "menu_dialog" then
       GUI:menu_dialog_mouse_pressed(x,y,b)
+    end
+    if popup_dialog == "debug_menu" then
+      GUI:debug_menu_mouse_pressed(x,y,b)
+    end
+    if popup_dialog == "summon_npc_debug" then
+      GUI:summonnpc_menu_mouse_pressed(x,y,b)
     end
     if popup_dialog == 'inventory' then
       GUI:inventory_mouse_pressed(x,y,b)
