@@ -14,6 +14,7 @@ local MenuDialog = require 'gui.dialogs.MenuDialog'
 --debug
 local DebugMenu = require 'gui.dialogs.debug.DebugMenu'
 local SummonNPCMenu = require 'gui.dialogs.debug.SummonNPCMenu'
+local CreateItemMenu = require 'gui.dialogs.debug.CreateItemMenu'
 --death screen
 local DeathDialog = require 'gui.dialogs.DeathDialog'
 
@@ -36,6 +37,9 @@ function DialogsGUI:init_dialog(str)
     end
     if str == "summon_npc_debug" then
         SummonNPCMenu:load()
+    end
+    if str == "create_item_debug" then
+        CreateItemMenu:load()
     end
     if str == "inventory" then
         InventoryDialog:load()
@@ -139,6 +143,18 @@ end
 
 function DialogsGUI:summonnpc_menu_mouse_pressed(x,y,b)
     SummonNPCMenu:mouse_pressed(x,y,b)
+end
+
+function DialogsGUI:draw_createitem_dialog()
+    CreateItemMenu:draw()
+end
+
+function DialogsGUI:createitem_menu_mouse()
+    CreateItemMenu:mouse()
+end
+
+function DialogsGUI:createitem_menu_mouse_pressed(x,y,b)
+    CreateItemMenu:mouse_pressed(x,y,b)
 end
 
 --death screen

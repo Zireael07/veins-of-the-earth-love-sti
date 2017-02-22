@@ -95,6 +95,8 @@ function draw_dialogs(player)
     GUI:draw_debug_dialog()
   elseif popup_dialog == "summon_npc_debug" then
     GUI:draw_summonnpc_dialog()
+  elseif popup_dialog == "create_item_debug" then
+    GUI:draw_createitem_dialog()
   elseif popup_dialog == "character_creation" then
     GUI:draw_character_creation(player)
   elseif popup_dialog == "inventory" then
@@ -156,6 +158,9 @@ function gamemode.update(dt)
     end
     if popup_dialog == "summon_npc_debug" then
       GUI:summonnpc_menu_mouse()
+    end
+    if popup_dialog == "create_item_debug" then
+      GUI:createitem_menu_mouse()
     end
     if popup_dialog == 'inventory' then
       GUI:inventory_mouse()
@@ -261,6 +266,9 @@ function gamemode.mousepressed(x,y,b)
     if popup_dialog == "summon_npc_debug" then
       GUI:summonnpc_menu_mouse_pressed(x,y,b)
     end
+    if popup_dialog == "create_item_debug" then
+      GUI:createitem_menu_mouse_pressed(x,y,b)
+    end
     if popup_dialog == 'inventory' then
       GUI:inventory_mouse_pressed(x,y,b)
     end
@@ -332,7 +340,7 @@ end
 function setDialog(str, init, data)
   --clean up
   GUI:unload()
-  print("[GAME] set dialog")
+  print("[GAME] set dialog", str)
   popup_dialog = str
   if data then
     npc_chat = data
