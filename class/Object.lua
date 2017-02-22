@@ -14,9 +14,14 @@ function _M:init(t)
     self.image = t.image
     self.name = t.name
     self.add_name = t.add_name
+    --basic
+    self.type = t.type
+    self.subtype = t.subtype or nil
+    --for inventory
     self.slot = t.slot
     self.combat = t.combat
     self.wielder = t.wielder
+    --for desc
     self.cost = 0
     self.desc = t.desc
     self.on_prepickup = t.on_prepickup

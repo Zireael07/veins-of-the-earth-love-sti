@@ -10,21 +10,13 @@ function CreateItemMenu:load()
     local x = 210
     local y = 150
     local w = 60
-    local list = {}
-    for k, v in pairs(object_types) do
-        if v.name then
-            list[#list+1] = {name =v.name, key=k, data=v}
-        end
-    end
-    table.sort(list, function(a,b)
-        return a.name < b.name
-    end)
+    local list_types = {}
+    list_types = CreateItemMenu:generateCategories()
+    --local list = {}
 
-    for i,e in ipairs(list) do
-        if e.name and loaded_tiles[e.data.image] then
-            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), function() CreateItemMenu:create(e.data, e.key) end)
-            y = y + 15
-        end
+    for i,e in ipairs(list_types) do
+        UI:init_text_button(x,y,w, e.name, e.name:capitalize(), function() CreateItemMenu:categorySelect(e.name) end)
+        y = y + 15
     end
 end
 
@@ -51,11 +43,62 @@ function CreateItemMenu:mouse_pressed(x,y,b)
     UI:mouse_pressed(x,y,b)
 end
 
+function CreateItemMenu:generateCategories()
+    local list = {}
+    local hits = {}
+
+    for k, o in pairs(object_types) do
+        if o.type and _G.type(o.type) == "string" then
+            local name = o.type
+            local key = o.type
+
+            if not hits[key] then
+                 list[#list+1] = { name=key, type=o.type }
+                 hits[key] = true
+            end
+        end
+    end
+
+    table.sort(list, function(a,b) return a.name < b.name end)
+    return list
+end
+
+function CreateItemMenu:categorySelect(type)
+    --print("Selected category is ", type)
+    list = CreateItemMenu:generateItems(type)
+
+    local x = 280
+    local y = 150
+    local w = 60
+    for i,e in ipairs(list) do
+        if e.name then
+            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), function() CreateItemMenu:create(e.data, e.key) end)
+            y = y + 15
+        end
+    end
+end
+
+function CreateItemMenu:generateItems(type)
+    local list = {}
+    for k, o in pairs(object_types) do
+        if o.name and o.type == type then
+            list[#list+1] = {name =o.name, key=k, data=o}
+        end
+    end
+    table.sort(list, function(a,b)
+        return a.name < b.name
+    end)
+
+    return list
+end
+
 function CreateItemMenu:create(data, key)
     --make sure we have the tile for what we want to spawn
     if loaded_tiles[data.image] then
         Spawn:createItem(player.x, player.y, key)
         print("Spawning... "..key)
+    else
+        print("We're missing a tile for "..data.name)
     end
     --print("Clicked option: "..data.name.. " key "..key)
 end
