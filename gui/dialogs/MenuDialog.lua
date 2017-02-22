@@ -18,7 +18,7 @@ function MenuDialog:draw()
     love.graphics.print("MAIN MENU", 210, 100)
 
     love.graphics.setColor(colors.GOLD)
-    love.graphics.line(200, 140, 550, 120)
+    love.graphics.line(200, 120, 550, 120)
 
     UI:draw(button)
 end

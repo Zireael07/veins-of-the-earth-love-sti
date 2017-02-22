@@ -10,9 +10,19 @@ function CreateItemMenu:load()
     local x = 210
     local y = 150
     local w = 60
+    local list = {}
     for k, v in pairs(object_types) do
-        if v.name and loaded_tiles[v.image] then
-            UI:init_text_button(x, y, w, v.name, v.name:capitalize(), function() CreateItemMenu:create(v, k) end)
+        if v.name then
+            list[#list+1] = {name =v.name, key=k, data=v}
+        end
+    end
+    table.sort(list, function(a,b)
+        return a.name < b.name
+    end)
+
+    for i,e in ipairs(list) do
+        if e.name and loaded_tiles[e.data.image] then
+            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), function() CreateItemMenu:create(e.data, e.key) end)
             y = y + 15
         end
     end
