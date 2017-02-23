@@ -43,6 +43,7 @@ function gamemode.load()
       Spawn:createActor(7,7, "human")
       Spawn:createItem(3,3, "studded armor")
       Spawn:createItem(2,2, "torch")
+      Spawn:makeItem(4,4, "leather armor", {"+1"})
     end
 
     player = Spawn:createPlayer(5, 5)

@@ -8,6 +8,8 @@ local NPC = require 'class.NPC'
 local Object = require 'class.Object'
 local Map = require 'class.Map'
 
+local Ego = require 'class.Ego'
+
 module("Spawn", package.seeall, class.make)
 
 function Spawn:createPlayer(x,y)
@@ -94,6 +96,29 @@ function Spawn:createItem(x,y, id)
     end
 
     return object
+end
+
+function Spawn:makeItem(x,y,id, ego_str)
+  o = Spawn:createItem(x,y,id)
+  
+  --convert string to ego def
+  if ego_str and #ego_str > 0 then
+    ego = {}
+    for i,str in ipairs(ego_str) do
+      local index = ego_str[i]
+      --print("Ego index is ", index)
+      ego[#ego+1] = properties_def[index]
+    end
+  end
+
+  --apply egos
+  if ego and #ego > 0 then
+    for i,e in ipairs(ego) do
+      if Ego:canApplyEgo(o, ego[i]) then
+        Ego:applyEgo(o, ego[i])
+      end
+    end
+  end
 end
 
 return Spawn
