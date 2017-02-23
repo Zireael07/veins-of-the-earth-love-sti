@@ -110,7 +110,7 @@ function CreateItemMenu:categorySelect(type)
     local w = 60
     for i,e in ipairs(list_egos) do
         if e.name then
-            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), 
+            UI:init_text_button(x, y, w, e.name, e.name:capitalize().." ("..e.ego_subtype..")", 
                 --left click
                 function() CreateItemMenu:selectEgo(e.data) end,
                 function() CreateItemMenu:clearEgoList() end)
@@ -151,6 +151,8 @@ function CreateItemMenu:clearEgoList()
 end
 
 function CreateItemMenu:create(data, ego, key)
+    --bail out early if we don't have the item data
+    if not data then return end
     --make sure we have the tile for what we want to spawn
     if loaded_tiles[data.image] then
         --data.name MUST equal the key for it to be reliable
@@ -159,7 +161,11 @@ function CreateItemMenu:create(data, ego, key)
         --apply any egos
         if ego and #ego > 0 then
             for i,e in ipairs(ego) do
-                Ego:applyEgo(o, ego[i])
+                if Ego:canApplyEgo(o, ego[i]) then 
+                    Ego:applyEgo(o, ego[i])
+                else
+                    print("Cannot apply ego of subtype, "..ego[i].ego_subtype)
+                end
             end
         end
     else
