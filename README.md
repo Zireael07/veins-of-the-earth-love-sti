@@ -15,3 +15,5 @@ Place them in /libraries folder.
 [Gamera](https://github.com/kikito/gamera) - required for camera class (scrolling map)
 
 [Jumper](https://github.com/Yonaba/Jumper) - a fast pathfinding library (A* and Dijkstra)
+
+[ROTLove](https://github.com/paulofmandown/rotLove) - a port of rot.js to Lua plus some dice code
