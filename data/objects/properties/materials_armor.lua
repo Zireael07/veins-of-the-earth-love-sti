@@ -1,7 +1,7 @@
 properties_def["mithril"] = {
     type = "armor",
     name = "mithril ", prefix = true,
-    keywords = {mithril=true},
+    ego_subtype = "material",
     level_range = {4, nil},
     rarity = 20, --5% chance
     cost = {
@@ -19,7 +19,7 @@ properties_def["mithril"] = {
 properties_def["adamantine"] = {
     type = "armor",
     name = "adamantine ", prefix = true,
-    keywords = {adamantine=true},
+    ego_subtype = "material",
     level_range = {4, nil},
     rarity = 20, --5% chance
     cost = {

@@ -3,7 +3,7 @@
 properties_def["masterwork"] = {
     type = "armor",
     name = "masterwork ", prefix = true, --addon=true,
-    keywords = {mwk=true},
+    ego_subtype = "bonus",
     level_range = {1, nil},
     --fake_ego = true,
     rarity = 2,
@@ -19,7 +19,7 @@ properties_def["masterwork"] = {
 properties_def["+1"] = {
     type = "armor",
     name = " +1", suffix = true, --addon=true,
-    keywords = {bonus=true},
+    ego_subtype = "bonus",
     level_range = {4, nil},
     rarity = 5,
 --  cost = 2000,
@@ -37,7 +37,7 @@ properties_def["+1"] = {
 properties_def["+2"] = {
     type = "armor",
     name = " +2", suffix = true, --addon=true,
-    --keywords = {bonus=true},
+    ego_subtype = "bonus",
     level_range = {8, nil},
     rarity = 10,
 --  cost = 4000,
@@ -55,7 +55,7 @@ properties_def["+2"] = {
 properties_def["+3"] = {
     type = "armor",
     name = " +3", suffix = true, --addon=true,
-    keywords = {bonus=true},
+    ego_subtype = "bonus",
     level_range = {12, nil},
     rarity = 18,
 --  cost = 16000,
