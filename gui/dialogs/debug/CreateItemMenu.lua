@@ -108,7 +108,7 @@ function CreateItemMenu:categorySelect(type)
     end
 
     --button
-    UI:init_text_button(500, 400, 40, "create", "Create!", function() CreateItemMenu:create(sel_item) end)
+    UI:init_text_button(500, 400, 40, "create", "Create!", function() CreateItemMenu:create(sel_item, sel_ego) end)
 end
 
 function CreateItemMenu:generateItems(type)
@@ -135,12 +135,16 @@ function CreateItemMenu:selectEgo(data)
     sel_ego = data
 end
 
-function CreateItemMenu:create(data, key)
+function CreateItemMenu:create(data, ego, key)
     --make sure we have the tile for what we want to spawn
     if loaded_tiles[data.image] then
         --data.name MUST equal the key for it to be reliable
-        Spawn:createItem(player.x, player.y, data.name)
+        o = Spawn:createItem(player.x, player.y, data.name)
         print("Spawning... "..data.name)
+        --apply any egos
+        if ego then
+            Ego:applyEgo(o, ego)
+        end
     else
         print("We're missing a tile for "..data.name)
     end
