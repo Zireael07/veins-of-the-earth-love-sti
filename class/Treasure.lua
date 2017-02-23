@@ -1,34 +1,11 @@
 require 'T-Engine.class'
 
+local treasure = require "data/treasure_lists"
+
 module("Treasure", package.seeall, class.make)
 
-treasure = {
-    coins = { 
-        [1] = {
-            {1, 14, "nil"},
-            {15, 29, "1d6 x 1000 cp"},
-            {30, 52, "1d8 x 100 sp"},
-            {53, 95, "2d8 x 10 gp"},
-            {96, 100, "1d4 x 1 pp"}
-        }
-    },
-    goods = {
-        [1] = {
-            {1, 90, "nil"},
-            {91, 95, "1 gem"},
-            {96, 100, "1 art"}
-    }
-    },
-    items = {
-        [1] = {
-            {1, 71, "nil"},
-            {72, 95, "1 mundane"},
-            {96, 100, "1 minor"}
-    }
-}
-}
-
 function Treasure:getCoins(lvl)
+    if not treasure then print("No treasure list!") return end
     local table = treasure.coins[lvl]
     local roll = rng:random(1, 100)
 
@@ -43,6 +20,7 @@ function Treasure:getCoins(lvl)
 end
 
 function Treasure:getGoods(lvl)
+    if not treasure then print("No treasure list!") return end
     local table = treasure.goods[lvl]
     local roll = rng:random(1, 100)
 
@@ -56,6 +34,7 @@ function Treasure:getGoods(lvl)
 end
 
 function Treasure:getItems(lvl)
+    if not treasure then print("No treasure list!") return end
     local table = treasure.items[lvl]
     local roll = rng:random(1, 100)
 
