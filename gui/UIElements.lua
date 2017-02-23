@@ -11,14 +11,14 @@ function UIElements:unload()
     element = {}
 end
 
-function UIElements:init_text_button(x,y, w, id, text, on_press)
+function UIElements:init_text_button(x,y, w, id, text, on_press, on_press_alt)
     if not x or not y or not id or not text then print("[UI] Missing parameters!") return end
-    element[#element+1] = {x = x, y=y, w=w, id=id, text=text, on_press=on_press}
+    element[#element+1] = {x = x, y=y, w=w, id=id, text=text, on_press=on_press, on_press_alt=on_press_alt}
 end
 
-function UIElements:init_image_button(x,y, id, image, param, on_press)
+function UIElements:init_image_button(x,y, id, image, param, on_press, on_press_alt)
     if not x or not y or not id or not image then print("[UI] Missing parameters!") return end
-    element[#element+1] = {x=x, y=y, id=id, image=image, param=param, on_press=on_press}
+    element[#element+1] = {x=x, y=y, id=id, image=image, param=param, on_press=on_press, on_press_alt=on_press_alt}
 end
 
 --generic stuff
@@ -62,18 +62,24 @@ function UIElements:mouse()
 end
 
 function UIElements:mouse_pressed(x,y,b)
-    if b == 1 then
-        for i,e in ipairs(element) do
-            local width = e.w or 20
-            local height = 15
-            if e.inventory then width = 42 height = 42 end
+    for i,e in ipairs(element) do
+        local width = e.w or 20
+        local height = 15
+        if e.inventory then width = 42 height = 42 end
 
-            if x > e.x and x < e.x + width then
-                if y > e.y and y < e.y + height then
+        if x > e.x and x < e.x + width then
+            if y > e.y and y < e.y + height then
+                if b == 1 then
                     --print("Pressed mouse over element "..e.id)
                     if e.on_press then
                         print("We have on_press, calling it")
                         e.on_press()
+                    end
+                end
+                if b == 2 then
+                    if e.on_press_alt then
+                        print("We have on_press_alt, calling it")
+                        e.on_press_alt()
                     end
                 end
             end

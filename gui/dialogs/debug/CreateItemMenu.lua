@@ -18,6 +18,9 @@ function CreateItemMenu:load()
         UI:init_text_button(x,y,w, e.name, e.name:capitalize(), function() CreateItemMenu:categorySelect(e.name) end)
         y = y + 15
     end
+
+    --init a list of egos
+    sel_ego = {}
 end
 
 function CreateItemMenu:draw()
@@ -40,13 +43,18 @@ function CreateItemMenu:draw()
 
     UI:draw(button)
 
+    local y = 380
     if sel_item then
         love.graphics.setColor(colors.GREEN)
-        love.graphics.print(sel_item.name, 280, 400)
+        love.graphics.print(sel_item.name, 280, y)
     end
-    if sel_ego then
+    if #sel_ego > 0 then
         love.graphics.setColor(colors.LIGHT_GREEN)
-        love.graphics.print(sel_ego.name, 410, 400)
+        x = 410
+        for i,e in ipairs(sel_ego) do
+            love.graphics.print(sel_ego[i].name, x, y)
+            y = y + 15
+        end
     end
 end
 
@@ -55,7 +63,7 @@ function CreateItemMenu:mouse()
 end
 
 function CreateItemMenu:mouse_pressed(x,y,b)
-    if mouse.x > 600 or mouse.y < 100 then return end
+    if mouse.x > 700 or mouse.y < 100 then return end
     UI:mouse_pressed(x,y,b)
 end
 
@@ -102,13 +110,16 @@ function CreateItemMenu:categorySelect(type)
     local w = 60
     for i,e in ipairs(list_egos) do
         if e.name then
-            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), function() CreateItemMenu:selectEgo(e.data) end)
+            UI:init_text_button(x, y, w, e.name, e.name:capitalize(), 
+                --left click
+                function() CreateItemMenu:selectEgo(e.data) end,
+                function() CreateItemMenu:clearEgoList() end)
             y = y + 15
         end
     end
 
     --button
-    UI:init_text_button(500, 400, 40, "create", "Create!", function() CreateItemMenu:create(sel_item, sel_ego) end)
+    UI:init_text_button(600, 400, 40, "create", "Create!", function() CreateItemMenu:create(sel_item, sel_ego) end)
 end
 
 function CreateItemMenu:generateItems(type)
@@ -132,7 +143,11 @@ end
 
 function CreateItemMenu:selectEgo(data)
     print("Ego is ", data.name)
-    sel_ego = data
+    sel_ego[#sel_ego+1] = data
+end
+
+function CreateItemMenu:clearEgoList()
+    sel_ego = {}
 end
 
 function CreateItemMenu:create(data, ego, key)
@@ -142,8 +157,10 @@ function CreateItemMenu:create(data, ego, key)
         o = Spawn:createItem(player.x, player.y, data.name)
         print("Spawning... "..data.name)
         --apply any egos
-        if ego then
-            Ego:applyEgo(o, ego)
+        if ego and #ego > 0 then
+            for i,e in ipairs(ego) do
+                Ego:applyEgo(o, ego[i])
+            end
         end
     else
         print("We're missing a tile for "..data.name)
