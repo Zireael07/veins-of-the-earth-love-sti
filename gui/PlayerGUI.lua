@@ -128,6 +128,41 @@ function PlayerGUI:draw_log_messages()
     end
 end
 
+--optional stuff
+function PlayerGUI:tiletoactorlabel(x,y)
+    local pixel_x, pixel_y = Display:tiletoLoc(x,y)
+    pixel_x, pixel_y = pixel_x, math.floor(pixel_y-15) --0.2*tileMap.tileheight
+
+    return pixel_x, pixel_y
+end
+
+function PlayerGUI:tiletoobjectlabel(x,y)
+    local pixel_x, pixel_y = Display:tiletoLoc(x,y)
+    pixel_x, pixel_y = math.floor(pixel_x+20), pixel_y--+0.2*tileMap.tileheight
+
+    return pixel_x, pixel_y
+end
+
+
+function PlayerGUI:draw_labels()
+    --reset color
+    love.graphics.setColor(255, 255, 255)
+    for y=1, tileMap.width do --Map:getWidth()-1 do
+        for x=1, tileMap.height do --Map:getHeight()-1 do
+            if Map:isTileSeen(x,y) and Map:getCellActor(x,y) then
+                a = Map:getCellActor(x, y)
+                love.graphics.setColor(255, 255, 102)
+                love.graphics.print(a.name, PlayerGUI:tiletoactorlabel(x,y))
+            end
+            if Map:isTileSeen(x,y) and Map:getCellObjects(x,y) then
+                o = Map:getCellObject(x,y, 1)
+                love.graphics.setColor(255, 255, 255)
+                love.graphics.print(o.name, PlayerGUI:tiletoobjectlabel(x,y))
+            end
+        end
+    end
+end
+
 function PlayerGUI:tiletosplash(x,y)
     local pixel_x, pixel_y = Display:tiletoLoc(x,y)
     pixel_x, pixel_y = pixel_x, pixel_y+0.2*tileMap.tileheight

@@ -129,6 +129,7 @@ function gamemode.draw()
     --draw stuff that isn't in tilemap
     draw_tiles(l,t,w,h)
     GUI:draw_damage_splashes()
+    if player and do_draw_labels == true then GUI:draw_labels() end
   end)
     
     --camera independent GUI
@@ -226,6 +227,13 @@ function gamemode.keypressed(k, sc)
         popup_dialog = "help_controls"
       elseif sc == 'i' then
         setDialog("inventory", "inventory")
+      --labels
+      elseif sc == "tab" then 
+        if not do_draw_labels then      
+          do_draw_labels = true
+        else
+          do_draw_labels = false
+        end
       end
     end
   end
