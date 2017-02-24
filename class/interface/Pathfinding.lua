@@ -132,13 +132,25 @@ function isTilePassable(x,y)
   return ret 
 end
 
+--wrapper around ROT.DijkstraMap functions to avoid printing to console
+function Pathfinding:makeDijkstraString(map)
+  --print("[DIJKSTRA] Making a string representation of the map")
+  local ls=''
+  for y=1,map._dimensions.h do
+      local s=''
+      for x=1,map._dimensions.w do
+          s=s..map._map[x][y]..','
+      end
+      ls=ls..s..'\n'
+  end
+  return ls
+end
 function Pathfinding:makeDijkstraMap(target_x, target_y, self_x, self_y, width, height)
     print_to_log("[DIJKSTRA] target x: ", target_x, "y", target_y, "self x", self_x, "y: ", self_y, "width", width, "height", height)
     player_dijkstra_map = ROT.DijkstraMap:new(target_x, target_y, width, height, isTilePassable)
     player_dijkstra_map:compute()
-    --player_dijkstra_map:writeMapToConsole()
 
-    temp_string = player_dijkstra_map:writeMapToConsole(true)
+    temp_string = Pathfinding:makeDijkstraString(player_dijkstra_map)
 
     map_string = Pathfinding:setDijkstraString(temp_string)
     dijkstra = Pathfinding:parseDijkstraString(map_string)
