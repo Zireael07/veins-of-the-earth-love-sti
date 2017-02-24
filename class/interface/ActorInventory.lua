@@ -154,7 +154,7 @@ function _M:pickupFloor(i)
 end
 
 function _M:canWearObject(o, try_slot)
-    print("Checking if we can wear object ", o.name, try_slot)
+    print_to_log("Checking if we can wear object ", o.name, try_slot)
     -- check the slot
     if try_slot and try_slot ~= o.slot then
         return nil, "wrong equipment slot"
@@ -172,13 +172,13 @@ function _M:wearObject(o, inven_id)
     local ok, err = self:canWearObject(o, inven.name)
 
     if not ok then
-        print("Can not wear", o.name)
+        print_to_log("Can not wear", o.name)
         return false
     end
 
     local added = self:addObject(inven_id, o)
     if added then
-        print("Wearing "..o.name.." in slot "..inven.name)
+        print_to_log("Wearing "..o.name.." in slot "..inven.name)
         self:onWear(o, self.inven_def[inven.id].short_name)
     end
     return true

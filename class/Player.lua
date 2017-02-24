@@ -64,7 +64,7 @@ function _M:movetoMouse(x,y, self_x, self_y)
   if x == self_x and y == self_y then print("Error: trying to move to own position") return end
   path = Pathfinding:findPath(x, y, self_x, self_y)
 
-  print("Moving to mouse", x,y)
+  print_to_log("Moving to mouse", x,y)
   self:moveAlongPath(path)
   --update FOV
   self:update_draw_visibility_new()
@@ -74,7 +74,7 @@ end
 
 --inventory
 function _M:playerPickup()
-  print("Player: pickup")
+  --print("Player: pickup")
     if Map:getCell(self.x,self.y):getNbObjects() > 1 then
       --should draw pickup list
       --for now pick all at once
@@ -82,7 +82,7 @@ function _M:playerPickup()
         self:pickupFloor(i)
       end
     else
-      print("We have one object to pick")
+      --print("We have one object to pick")
     self:pickupFloor(1)
     end
 end
@@ -137,7 +137,7 @@ end
 function _M:incMoney(color, val)
   if not self.money[color] then print("Specified invalid coin color", color) end
   self.money[color] = (self.money[color] or 0) + val
-  print("Increased money ", color, "by ", val)
+  print_to_log("Increased money ", color, "by ", val)
 end
 
 

@@ -192,9 +192,9 @@ function _M:on_die(src)
 end
 
 function _M:equipItems(t)
-  print("Equipping items")
+  --print("Equipping items")
   for i, v in ipairs(t) do
-    print("Spawning item for equipment for", self.name)
+    --print("Spawning item for equipment for", self.name)
     local o
       o = Spawn:createItem(1, 1, v.name)
 
@@ -206,10 +206,10 @@ function _M:equipItems(t)
           --print("Object's slot is", o.slot)
           if self:wearObject(o, o.slot) then
 
-          print("Wearing an object", o.name)
+          print_to_log("[Equipping] Wearing an object", o.name)
           else
             self:addObject(self.INVEN_INVEN, o)
-            print("Adding object to inventory", o.name)
+            print_to_log("Adding object to inventory", o.name)
           end
         end
       end
