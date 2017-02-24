@@ -26,6 +26,8 @@ function Spawn:createPlayer(x,y)
     player_temp = Player.new(t)
 
     player_temp:move(x, y)
+    --update FOV
+    player_temp:update_draw_visibility_new()
 
     print("[Spawn] Created player at ", x,y)
     return TurnManager:addEntity(player_temp)

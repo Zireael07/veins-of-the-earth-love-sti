@@ -13,7 +13,7 @@ function ActorFOV:resetVisibleTiles()
 end
 
 function ActorFOV:update_draw_visibility_new()
-    print("Our x, y are: ", self.x, self.y)
+    print("[ActorFOV] Our x, y are: ", self.x, self.y)
 
     --reset visible tiles
     self:resetVisibleTiles()
