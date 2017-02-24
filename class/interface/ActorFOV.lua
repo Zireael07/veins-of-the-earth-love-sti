@@ -13,14 +13,15 @@ function ActorFOV:resetVisibleTiles()
 end
 
 function ActorFOV:update_draw_visibility_new()
-    print("[ActorFOV] Our x, y are: ", self.x, self.y)
+    local radius = 4 --self.lite or 0
+    print("[ActorFOV] Our x,y are: "..self.x..", "..self.y..". R: "..radius)
 
     --reset visible tiles
     self:resetVisibleTiles()
     -- mark all seen tiles as not currently seen
     
     fov=ROT.FOV.Precise:new(lightPassesCallback,{topology=8})
-    results = fov:compute(self.x,self.y,4,isVisibleCallback)
+    results = fov:compute(self.x,self.y,radius,isVisibleCallback)
     --results = fov:compute(self.x, self.y, self.lite or 0, isVisibleCallback)
 end
 
@@ -29,7 +30,7 @@ function lightPassesCallback(coords,qx,qy)
     -- required as otherwise moving near the edge crashes
     if Map:getCell(qx, qy) then
         -- actual check
-        if Map:getCellTerrain(qx, qy) == 120 then
+        if Map:getCellTerrain(qx, qy) == 210 then
             return true
         end
     end
