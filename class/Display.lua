@@ -4,6 +4,11 @@ local Map = require "class.Map"
 
 module("Display", package.seeall, class.make)
 
+function Display:init()
+    --init shader
+    outline_shader = love.graphics.newShader("gfx/shaders/outline.glsl")
+end
+
 --convert tile coords to display x,y
 function Display:tiletoLoc(x,y)
   local x,y = tileMap:convertTileToPixel(x,y)
@@ -59,12 +64,22 @@ function Display:draw_display(x,y,w,h)
           --reset color
           love.graphics.setColor(255,255,255)
           love.graphics.draw(loaded_tiles[a.image], draw_x, draw_y)
+          --draw outline around actors to make them pop out
+          outline_shader:send( "stepSize", {1/32, 1/32})
+          love.graphics.setShader(outline_shader)
+          love.graphics.draw(loaded_tiles[a.image], draw_x, draw_y)
+          love.graphics.setShader()
         end
       end
     end
 
     local draw_x, draw_y = Display:tiletoLoc(player.x, player.y)
     love.graphics.draw(loaded_tiles["player_tile"], draw_x, draw_y)
+    --draw outline around actors to make them pop out
+    outline_shader:send( "stepSize", {1/32, 1/32})
+    love.graphics.setShader(outline_shader)
+    love.graphics.draw(loaded_tiles["player_tile"], draw_x, draw_y)
+    love.graphics.setShader()
 end
 
 return Display

@@ -30,6 +30,8 @@ function gamemode.load()
 
     --load GUI
     GUI:loadGUI()
+    --init the display stuff
+    Display:init()
 
     --can't mobdebug here because it freezes
     --tileMap = sti("data/maps/arena_isometric.lua")
