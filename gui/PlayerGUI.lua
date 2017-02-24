@@ -175,7 +175,7 @@ function PlayerGUI:draw_damage_splashes()
     love.graphics.setColor(255, 255, 255)
     for y=1, tileMap.width do --Map:getWidth()-1 do
         for x=1, tileMap.height do --Map:getHeight()-1 do
-            if Map:isTileSeen(x,y) and Map:getCellActor(x,y) then
+            if Map:isTileVisible(x,y) and Map:getCellActor(x,y) then
                 a = Map:getCellActor(x, y)
                 if a.damage_taken then
                     local pixel_x, pixel_y = PlayerGUI:tiletosplash(x,y)
