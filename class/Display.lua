@@ -39,6 +39,19 @@ function Display:unitIndicatorCircle(x,y, a)
   end
 end
 
+---debugging
+function Display:drawDebug(x,y)
+  love.graphics.setColor(255,255,255)
+  local draw_x,draw_y = Display:tiletoLoc(x,y)
+  draw_y = draw_y + tileMap.tileheight/2
+  if Map:isTileVisible(x,y) then
+    love.graphics.setColor(255, 0, 0)
+    love.graphics.print("VIS", draw_x, draw_y)
+  else
+    love.graphics.setColor(128,128,128)
+    love.graphics.print("NOT VIS", draw_x, draw_y)
+  end
+end
 
 function Display:drawActors(x,y)
   --draw actors
@@ -63,6 +76,7 @@ function Display:drawActors(x,y)
     end
   end
 end
+
 --actual display stuff
 function Display:draw_display(x,y,w,h)
     --reset color
@@ -84,7 +98,9 @@ function Display:draw_display(x,y,w,h)
             draw_y = draw_y + tileMap.tileheight/3
             love.graphics.draw(loaded_tiles[o.image], draw_x, draw_y)
           end
-        end
+        end --end of if visible or seen
+        love.graphics.setColor(255, 255, 255)
+        --Display:drawDebug(x,y)
       end
     end
 end
