@@ -55,10 +55,15 @@ body {
   /*padding: 15px 20px 15px 20px;*/
 }
 
-.container {
+.container_pad {
   margin: 0 auto;
   padding-left: 30px;
   padding-right: 30px;
+  width: 960px;
+}
+
+.container {
+  margin: 0 auto;
   width: 960px;
 }
 
@@ -70,15 +75,17 @@ body {
   background-origin: content-box;
   height: 255px; /* Height of header pic */
   background-size: auto;
+  /* make header responsive */
+  max-width:100%;
+  max-height:100%;
 }
 
 .teaser{
-  width: 960px;
   position: absolute;
   top: 260px;  /* Height of header pic + some padding */
-  left: 0;
-  bottom: 0;
-  right: 0; 
+  max-width: 100%;
+  max-height: 100%;
+  
 }
 
 h1, h2, h3, h4 {
