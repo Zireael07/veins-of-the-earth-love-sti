@@ -1,6 +1,8 @@
 --require two libraries that are absolutely crucial
 sti = require("libraries/sti")
 ROT=require 'libraries/rotLove/rotLove'
+--profiling
+--ProFi = require 'libraries.ProFi'
 
 -- LÖVE Shortcuts
 lg  = love.graphics
@@ -8,13 +10,8 @@ lg  = love.graphics
 --print to console in realtime
 io.stdout:setvbuf('no')
 
-do
   require "helpers/gamefunctions"
   require "helpers/utils"
-  --create log file
-    make_log_file()
-    open_save()
-end
 
 --load
 function load_stuff()
@@ -42,10 +39,18 @@ function love.load(arg)
     require("mobdebug").off()
     --use require("mobdebug").on and require("mobdebug").off where necessary
   end
-  
-  load_stuff()
+
+  sherwood_large = love.graphics.newFont("fonts/sherwood.ttf", 20)
   --set default font (large because of main menu)
   love.graphics.setFont(sherwood_large)
+  loadGamemode("menu")
+  
+  --[[ProFi:start()
+  ProFi:stop()
+  local success = ProFi:writeReport('MyProfilingReport.txt')  --( string.format( '../profiling/startup_%d.txt', os.time( os.date( '*t' ))));
+]]
+
+
 end
 
 
