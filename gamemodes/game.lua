@@ -234,6 +234,9 @@ function gamemode.keypressed(k, sc)
         else
           do_draw_labels = false
         end
+      --debugging help (open log/save folder)
+      elseif sc == "0" then
+            open_save()
       end
     end
   end

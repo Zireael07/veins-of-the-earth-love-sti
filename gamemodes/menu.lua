@@ -6,9 +6,9 @@ function gamemode.load()
 end
 
 function load_stuff()
+    
     --create log file
     make_log_file()
-    open_save()
 
     --load stuff that is necessary for all the classes/modules
     load = love.filesystem.load("load.lua")
