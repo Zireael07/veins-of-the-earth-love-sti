@@ -220,7 +220,7 @@ function Actor:equipItems(t)
         Map:setCellObjectbyIndex(o.x, o.y, nil, i)
         if o.slot then
           --print("Object's slot is", o.slot)
-          if self:wearObject(o, o.slot) then
+          if self:wearObject(o, o.slot, true) then
 
          -- print_to_log("[Equipping] Wearing an object", o.name)
           else

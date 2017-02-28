@@ -153,8 +153,10 @@ function ActorInventory:pickupFloor(i)
 
 end
 
-function ActorInventory:canWearObject(o, try_slot)
-    print_to_log("Checking if we can wear object ", o.name, try_slot)
+function ActorInventory:canWearObject(o, try_slot, no_log)
+    if not no_log then
+        print_to_log("Checking if we can wear object ", o.name, try_slot)
+    end
     -- check the slot
     if try_slot and try_slot ~= o.slot then
         return nil, "wrong equipment slot"
@@ -163,13 +165,13 @@ function ActorInventory:canWearObject(o, try_slot)
     return true
 end
 
-function ActorInventory:wearObject(o, inven_id)
+function ActorInventory:wearObject(o, inven_id, no_log)
 --    print("Wearing: ", o, inven_id)
     local inven = self:getInven(inven_id)
     --catch errors if any
     if not inven then return end
 
-    local ok, err = self:canWearObject(o, inven.name)
+    local ok, err = self:canWearObject(o, inven.name, no_log)
 
     if not ok then
         print_to_log("Can not wear", o.name)
@@ -178,7 +180,9 @@ function ActorInventory:wearObject(o, inven_id)
 
     local added = self:addObject(inven_id, o)
     if added then
-        print_to_log("Wearing "..o.name.." in slot "..inven.name)
+        if not no_log then
+            print_to_log("Wearing "..o.name.." in slot "..inven.name)
+        end
         self:onWear(o, self.inven_def[inven.id].short_name)
     end
     return true
