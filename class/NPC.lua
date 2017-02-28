@@ -15,7 +15,7 @@ function NPC:init(t)
     ActorAI.init(self)
 end
 
-function _M:act()
+function NPC:act()
     ActorAI.act(self)
     if self:reactionToward(player) < 0 and self:canSeePlayer() then
         self:target(player.x, player.y)
@@ -24,27 +24,27 @@ function _M:act()
     end
 end
 
-function _M:target(x,y)
+function NPC:target(x,y)
   dir_x, dir_y = ActorAI:target(x, y, self.x, self.y)
   --print("[NPC] AI moving in dir", dir_x, dir_y)
   self:moveDir(dir_x, dir_y)
 end  
 
-function _M:randomTarget()
+function NPC:randomTarget()
     x, y = Map:findRandomStandingGrid()
     dir_x, dir_y = ActorAI:target(x, y, self.x, self.y)
     --print("[NPC] AI moving in dir", dir_x, dir_y)
     self:moveDir(dir_x, dir_y)
 end  
 
-function _M:on_die(src)
+function NPC:on_die(src)
     Actor.on_die(self, src)
     print("[NPC] on die")
     --gen treasure
     self:spawnTreasure(1)
 end
 
-function _M:spawnTreasure(lvl)
+function NPC:spawnTreasure(lvl)
     treasure = Treasure:selectTreasure(lvl)
     if treasure then
         Spawn:createItem(self.x, self.y, treasure)
