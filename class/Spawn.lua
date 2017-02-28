@@ -93,7 +93,9 @@ function Spawn:createItem(x,y, id)
     end
 
     if object then
-      print_to_log("[Spawn] Created item", object.name, " at ",x,y)
+      if x > 1 and y > 1 then
+        print_to_log("[Spawn] Created item", object.name, " at ",x,y)
+      end
       object:place(x,y)
     end
 

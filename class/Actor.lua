@@ -222,10 +222,10 @@ function Actor:equipItems(t)
           --print("Object's slot is", o.slot)
           if self:wearObject(o, o.slot) then
 
-          print_to_log("[Equipping] Wearing an object", o.name)
+         -- print_to_log("[Equipping] Wearing an object", o.name)
           else
             self:addObject(self.INVEN_INVEN, o)
-            print_to_log("Adding object to inventory", o.name)
+           -- print_to_log("Adding object to inventory", o.name)
           end
         end
       end

@@ -106,7 +106,7 @@ end
 --10 coppers to a silver, 20 silvers to a gold means 200 coppers to a gold
 --10 gold to a platinum means 2000 coppers to a platinum
 function _M:setValue(plat, gold, silver, copper)
-    print_to_log("[OBJECT] Setting value: plat ", plat, " gold ", gold, " silver ", silver, " copper ", copper)
+    --print_to_log("[OBJECT] Setting value: plat ", plat, " gold ", gold, " silver ", silver, " copper ", copper)
     local cost = 0
 
     if plat > 0 then
@@ -121,7 +121,7 @@ function _M:setValue(plat, gold, silver, copper)
     if copper > 0 then
         cost = cost + copper
     end
-    print_to_log("[OBJECT] Cost is ", cost)
+    --print_to_log("[OBJECT] Cost is ", cost)
     return cost
 end
 
