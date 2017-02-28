@@ -20,6 +20,7 @@ module("Actor", package.seeall, class.inherit(ActorTemporaryValues,
 
 function Actor:init(t)
     --print("Initing actor")
+    self.batch_logs = {}
     self.x = 1
     self.y = 1
     self.image = t.image
@@ -49,10 +50,24 @@ function Actor:init(t)
     ActorInventory.init(self, t)
     ActorLife.init(self, t)
     ActorStats.init(self, t)
+    
+    --batch logs
+    if self.stats_log_table then
+      self.batch_logs = table.clone(self.stats_log_table)
+    end
+    if self.life_logs_table then
+      self.batch_logs = batch_tables_together(self.batch_logs, self.life_logs_table)
+    end
+    self.stats_log_table = nil
+    self.life_logs_table = nil
     --delayed setup
     if self.inventory then
       print("We have an inventory")
       self:equipItems(self.inventory)
+    end
+    --test batch printing
+    if self.batch_logs then
+      batch_print_to_log(self.batch_logs)
     end
 end
 
