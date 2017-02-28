@@ -8,7 +8,7 @@ local PlayerRest = require 'class.interface.PlayerRest'
 
 module("Player", package.seeall, class.inherit(Actor, ActorFOV, PlayerRest))
 
-function _M:init(t)
+function Player:init(t)
     print("Initializing player")
     self.player = true
     self.body = t.body or {}
@@ -31,7 +31,7 @@ function _M:init(t)
     }
 end
 
-function _M:actPlayer()
+function Player:actPlayer()
   --print("[Player] act")
   
   --check for resting
@@ -43,7 +43,7 @@ function _M:actPlayer()
   end
 end
 
-function _M:PlayerMove(dir_string)
+function Player:PlayerMove(dir_string)
   if not dir_string then print("No direction!") 
   else 
     dir_x, dir_y = utils:dirfromstring(dir_string)
@@ -56,7 +56,7 @@ function _M:PlayerMove(dir_string)
   endTurn()
 end
 
-function _M:movetoMouse(x,y, self_x, self_y)
+function Player:movetoMouse(x,y, self_x, self_y)
   --handle clicking outside of map
   if not x or x > tileMap.width then return end
   if not y or y > tileMap.height then return end
@@ -73,7 +73,7 @@ function _M:movetoMouse(x,y, self_x, self_y)
 end
 
 --inventory
-function _M:playerPickup()
+function Player:playerPickup()
   --print("Player: pickup")
     if Map:getCell(self.x,self.y):getNbObjects() > 1 then
       --should draw pickup list
@@ -87,14 +87,14 @@ function _M:playerPickup()
     end
 end
 
-function _M:doDrop(inven, item)
+function Player:doDrop(inven, item)
   --bugfix
   item = tonumber(item)
   self:dropFloor(inven, item)
 end
 
 --resting
-function _M:spotHostiles()
+function Player:spotHostiles()
   print("Player: checking for hostiles")
   local seen = false
 
@@ -115,11 +115,11 @@ function _M:spotHostiles()
   return seen
 end
 
-function _M:playerRest()
+function Player:playerRest()
   self:restInit()
 end
 
-function _M:on_die(src)
+function Player:on_die(src)
   --call Actor's on_die
   Actor.on_die(self, src)
   --lock game
@@ -129,12 +129,12 @@ function _M:on_die(src)
 end
 
 --coins
-function _M:getCoins(color)
+function Player:getCoins(color)
   if not self.money[color] then print("Specified invalid coin color", color) end
   return self.money[color] or 0
 end
 
-function _M:incMoney(color, val)
+function Player:incMoney(color, val)
   if not self.money[color] then print("Specified invalid coin color", color) end
   self.money[color] = (self.money[color] or 0) + val
   print_to_log("Increased money ", color, "by ", val)

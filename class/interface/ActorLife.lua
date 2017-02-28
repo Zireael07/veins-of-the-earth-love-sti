@@ -3,12 +3,13 @@ require 'T-Engine.class'
 module("ActorLife", package.seeall, class.make)
 
 function ActorLife:init(t)
+    self.life_logs_table = {}
     self.max_hitpoints = t.max_hitpoints or 10
     self:setMaxHP()
     self.hitpoints = self.max_hitpoints or t.hitpoints
     self.max_wounds = t.max_wounds or 1
     self.wounds = t.wounds or 1
-    print_to_log("[ACTOR LIFE] Inited:", self.max_hitpoints, self.hitpoints)
+    print_later_to_log(self.life_logs_table, "[ACTOR LIFE] Inited:", self.max_hitpoints, self.hitpoints)
     --self.die_at = t.die_at or -10
     
 end

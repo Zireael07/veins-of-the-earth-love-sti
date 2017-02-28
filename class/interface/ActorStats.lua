@@ -2,6 +2,7 @@ require 'T-Engine.class'
 
 module("ActorStats", package.seeall, class.make)
 
+
 ActorStats.stats = { 'STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA' } --, 'LUC' }
 ActorStats.stat_names = {
   STR = 'Strength',
@@ -14,6 +15,7 @@ ActorStats.stat_names = {
 }
 
 function ActorStats:init(t)
+    self.stats_log_table = {}
     self.stats = {}
   for _, s in ipairs(ActorStats.stats) do
     self.stats[s] = { current = 10 }
@@ -25,7 +27,8 @@ function ActorStats:init(t)
     self:applyArray(array)
   end
 
-  print_to_log("Actor: initiated stats for ", self.name)
+  
+  print_later_to_log(self.stats_log_table, "Actor: initiated stats for ", self.name)
 end
 
 function ActorStats:getStat(s)
@@ -53,7 +56,7 @@ function ActorStats:setStat(s, val)
   local stat = self.stats[s]
 
   stat.current = val
-  print_to_log("Set stat", s, "to", val)
+  print_later_to_log(self.stats_log_table, "Set stat", s, "to", val)
 end
 
 

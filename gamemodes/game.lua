@@ -17,6 +17,13 @@ local gamera = require("libraries/gamera")
 
 
 function gamemode.load()
+    --loading text
+    love.graphics.setFont(goldbox_large_font)
+    loading_text = "Loading game stuff..."
+    local h = love.graphics.getHeight() - 150
+    love.graphics.print(loading_text, 120, h)
+    love.graphics.present()
+
     --setup stuff for turn manager
     acting_entities = {}
     visible_actors = {}
@@ -33,10 +40,20 @@ function gamemode.load()
     --init the display stuff
     Display:init()
 
+    love.graphics.clear()
+    loading_text = "Loading map..."
+    love.graphics.print(loading_text, 120, h)
+    love.graphics.present()
+    
     --can't mobdebug here because it freezes
     --tileMap = sti("data/maps/arena_isometric.lua")
     tileMap = sti("data/maps/arena_isometric_2.lua")
     if tileMap then
+      love.graphics.clear()
+      loading_text = "Loading area..."
+      love.graphics.print(loading_text, 120, h)
+      love.graphics.present()
+
       Map:init(tileMap.width+1, tileMap.height+1)
       Area:setup()
 
@@ -47,6 +64,11 @@ function gamemode.load()
       Spawn:createItem(2,2, "torch")
       Spawn:makeItem(4,4, "leather armor", {"+1"})
     end
+
+    love.graphics.clear()
+    loading_text = "Loading player..."
+    love.graphics.print(loading_text, 120, h)
+    love.graphics.present()
 
     player = Spawn:createPlayer(5, 5)
 
@@ -65,10 +87,10 @@ function gamemode.load()
     calendar = Calendar.new("data/calendar", "Today is the %s %s of %s DR. The time is %02d:%02d.", 1371, 1, 11)
     game_turn = s:getTime()
 
-
     --draw character creation
-    love.timer.sleep(.5)
+    --love.timer.sleep(.5)
     setDialog("character_creation", "character_creation")
+
 end
 
 function draw_tiles(x,y,w,h)

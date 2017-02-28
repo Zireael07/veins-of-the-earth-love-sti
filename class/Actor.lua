@@ -18,7 +18,9 @@ local Chat = require 'class.Chat'
 module("Actor", package.seeall, class.inherit(ActorTemporaryValues,
   ActorInventory, Combat, ActorLife, ActorStats))
 
-function _M:init(t)
+function Actor:init(t)
+    --print("Initing actor")
+    self.batch_logs = {}
     self.x = 1
     self.y = 1
     self.image = t.image
@@ -48,19 +50,33 @@ function _M:init(t)
     ActorInventory.init(self, t)
     ActorLife.init(self, t)
     ActorStats.init(self, t)
+    
+    --batch logs
+    if self.stats_log_table then
+      self.batch_logs = table.clone(self.stats_log_table)
+    end
+    if self.life_logs_table then
+      self.batch_logs = batch_tables_together(self.batch_logs, self.life_logs_table)
+    end
+    self.stats_log_table = nil
+    self.life_logs_table = nil
     --delayed setup
     if self.inventory then
       print("We have an inventory")
       self:equipItems(self.inventory)
     end
+    --test batch printing
+    if self.batch_logs then
+      batch_print_to_log(self.batch_logs)
+    end
 end
 
-function _M:act()
+function Actor:act()
   --check if we're alive
   if self.dead then return false end
 end
 
-function _M:move(x, y)
+function Actor:move(x, y)
   if not x or not y then return end
 
   x = math.floor(x)
@@ -78,7 +94,7 @@ function _M:move(x, y)
   Map:setCellActor(x, y, self)
 end
 
-function _M:moveDir(dx, dy)
+function Actor:moveDir(dx, dy)
   if not dx then dx = 0 end
   if not dy then dy = 0 end
   print_to_log("[Actor] move in dir", dx, dy)
@@ -94,7 +110,7 @@ function _M:moveDir(dx, dy)
  
 end
 
-function _M:canMove(x,y)
+function Actor:canMove(x,y)
   if not Map:getCellTerrain(x,y) then print("No terrain") return false
   else
     --should call combat
@@ -110,7 +126,7 @@ function _M:canMove(x,y)
   return true
 end
 
-function _M:moveAlongPath(path)
+function Actor:moveAlongPath(path)
   if not path or not path[2] then return end
   local tx = path[2].x
   local ty = path[2].y
@@ -120,13 +136,13 @@ function _M:moveAlongPath(path)
   end
 end
 
-function _M:reactionToward(target)
+function Actor:reactionToward(target)
   local ret = Faction:factionReaction(self.faction, target.faction)
   --print("Actor reaction toward, ", target.name, "is: ", ret)
   return ret
 end
 
-function _M:indicateReaction()
+function Actor:indicateReaction()
   local str
   if self:reactionToward(player) > 50 then str = "helpful"
   elseif self:reactionToward(player) > 0 then str = "friendly"
@@ -137,7 +153,7 @@ function _M:indicateReaction()
   return str
 end
 
-function _M:getReactionColor(val)
+function Actor:getReactionColor(val)
   local color 
   if val == "player" or val == "helpful" then
     color = {0, 255, 255}
@@ -154,7 +170,7 @@ function _M:getReactionColor(val)
   return color
 end
 
-function _M:bumpTarget(target)
+function Actor:bumpTarget(target)
   --check for reaction
   if target:reactionToward(self) < -50 then
     self:attackTarget(target)
@@ -169,7 +185,7 @@ function _M:bumpTarget(target)
   end
 end
 
-function _M:on_die(src)
+function Actor:on_die(src)
   print("[ACTOR] on_die")
   --drop our inventory
   local dropx, dropy = self.x, self.y
@@ -191,7 +207,7 @@ function _M:on_die(src)
   self.inven = {}
 end
 
-function _M:equipItems(t)
+function Actor:equipItems(t)
   --print("Equipping items")
   for i, v in ipairs(t) do
     --print("Spawning item for equipment for", self.name)
@@ -204,12 +220,12 @@ function _M:equipItems(t)
         Map:setCellObjectbyIndex(o.x, o.y, nil, i)
         if o.slot then
           --print("Object's slot is", o.slot)
-          if self:wearObject(o, o.slot) then
+          if self:wearObject(o, o.slot, true) then
 
-          print_to_log("[Equipping] Wearing an object", o.name)
+         -- print_to_log("[Equipping] Wearing an object", o.name)
           else
             self:addObject(self.INVEN_INVEN, o)
-            print_to_log("Adding object to inventory", o.name)
+           -- print_to_log("Adding object to inventory", o.name)
           end
         end
       end
@@ -217,7 +233,7 @@ function _M:equipItems(t)
 end
 
 --languages
-function _M:getLanguages()
+function Actor:getLanguages()
   local list = {}
 
     for i, n in pairs(self.languages) do
@@ -229,7 +245,7 @@ function _M:getLanguages()
   return list
 end
 
-function _M:speakLanguage(lg)
+function Actor:speakLanguage(lg)
   if type(lg) ~= "string" then return nil end
 
   for i,t in pairs(self:getLanguages()) do
@@ -238,7 +254,7 @@ function _M:speakLanguage(lg)
   return false
 end
 
-function _M:speakSameLanguage(target)
+function Actor:speakSameLanguage(target)
   for i, t in pairs(self:getLanguages()) do
     if target:speakLanguage(t.name) then return true end
     return false
@@ -246,7 +262,7 @@ function _M:speakSameLanguage(target)
 end
 
 --Portrait generator
-function _M:portraitGen()
+function Actor:portraitGen()
   local doll = "doll"
 
   if self.show_portrait == true then

@@ -21,9 +21,9 @@ require "T-Engine.class"
 
 module("ActorInventory", package.seeall, class.make)
 
-_M.inven_def = {}
+ActorInventory.inven_def = {}
 
-function _M:defineInventory(short_name, name, is_worn, desc, show_equip, infos)
+function ActorInventory:defineInventory(short_name, name, is_worn, desc, show_equip, infos)
     assert(name, "no inventory slot name")
     assert(short_name, "no inventory slot short_name")
     assert(desc, "no inventory slot desc")
@@ -43,10 +43,10 @@ function _M:defineInventory(short_name, name, is_worn, desc, show_equip, infos)
 end
 
 -- Auto define the inventory
-_M:defineInventory("INVEN", "In inventory", false, "") --INVEN_INVEN assumed to have no stacking limit
+ActorInventory:defineInventory("INVEN", "In inventory", false, "") --INVEN_INVEN assumed to have no stacking limit
 
 --- Initialises inventories with default values if needed
-function _M:init(t)
+function ActorInventory:init(t)
     self.inven = t.inven or {}
     self.body = t.body
     self:initBody()
@@ -55,7 +55,7 @@ end
 --- generate inventories according to the body definition table
 --  @param self.body = {SLOT_ID = max, ...}
 --  @param max = number of slots if number or table of properties (max = , stack_limit = , ..) merged into definition
-function _M:initBody()
+function ActorInventory:initBody()
     if self.body then
         local def
         for inven, max in pairs(self.body) do
@@ -73,7 +73,7 @@ function _M:initBody()
 end
 
 --- Returns the content of an inventory as a table
-function _M:getInven(id)
+function ActorInventory:getInven(id)
     if type(id) == "number" then
         return self.inven[id]
     elseif type(id) == "string" then
@@ -84,7 +84,7 @@ function _M:getInven(id)
 end
 
 --- Tells if an inventory still has room left
-function _M:canAddToInven(id)
+function ActorInventory:canAddToInven(id)
     if type(id) == "number" then
         return #self.inven[id] < self.inven[id].max
     elseif type(id) == "string" then
@@ -96,12 +96,12 @@ end
 
 --- Get stacking limit for an inventory
 --  @param id inventory id or table (stack_limit in inventory table takes precedence)
-function _M:invenStackLimit(id)
+function ActorInventory:invenStackLimit(id)
     local inven = self:getInven(id)
     return inven.stack_limit or self.inven_def[inven.id].stack_limit or math.huge
 end
 
-function _M:addObject(inven_id, o)
+function ActorInventory:addObject(inven_id, o)
     local inven = self:getInven(inven_id)
 
     if #inven >= inven.max then
@@ -115,7 +115,7 @@ function _M:addObject(inven_id, o)
 end 
 
 --item is the index we want to remove from
-function _M:removeObject(inven_id, item)
+function ActorInventory:removeObject(inven_id, item)
     local inven = self:getInven(inven_id)
 
     local o = inven[item]
@@ -128,7 +128,7 @@ function _M:removeObject(inven_id, item)
     end
 end
 
-function _M:pickupFloor(i)
+function ActorInventory:pickupFloor(i)
     local inven = self:getInven(self.INVEN_INVEN)
     if not inven then return end
 
@@ -153,8 +153,10 @@ function _M:pickupFloor(i)
 
 end
 
-function _M:canWearObject(o, try_slot)
-    print_to_log("Checking if we can wear object ", o.name, try_slot)
+function ActorInventory:canWearObject(o, try_slot, no_log)
+    if not no_log then
+        print_to_log("Checking if we can wear object ", o.name, try_slot)
+    end
     -- check the slot
     if try_slot and try_slot ~= o.slot then
         return nil, "wrong equipment slot"
@@ -163,13 +165,13 @@ function _M:canWearObject(o, try_slot)
     return true
 end
 
-function _M:wearObject(o, inven_id)
+function ActorInventory:wearObject(o, inven_id, no_log)
 --    print("Wearing: ", o, inven_id)
     local inven = self:getInven(inven_id)
     --catch errors if any
     if not inven then return end
 
-    local ok, err = self:canWearObject(o, inven.name)
+    local ok, err = self:canWearObject(o, inven.name, no_log)
 
     if not ok then
         print_to_log("Can not wear", o.name)
@@ -178,13 +180,15 @@ function _M:wearObject(o, inven_id)
 
     local added = self:addObject(inven_id, o)
     if added then
-        print_to_log("Wearing "..o.name.." in slot "..inven.name)
+        if not no_log then
+            print_to_log("Wearing "..o.name.." in slot "..inven.name)
+        end
         self:onWear(o, self.inven_def[inven.id].short_name)
     end
     return true
 end
 
-function _M:onWear(o, inven_id)
+function ActorInventory:onWear(o, inven_id)
     -- Apply wielder properties
     o.wielded = {}
 
@@ -202,14 +206,14 @@ function _M:onWear(o, inven_id)
 end
 
 
-function _M:doWear(inven, item, o, dst)
+function ActorInventory:doWear(inven, item, o, dst)
     if self:wearObject(o, dst) then
       self:removeObject(inven, item)
     end
     
 end
 
-function _M:onTakeoff(o, inven_id)
+function ActorInventory:onTakeoff(o, inven_id)
     if o.wielded then
         for k, id in pairs(o.wielded) do
             if type(id) == "table" then
@@ -222,7 +226,7 @@ function _M:onTakeoff(o, inven_id)
     o.wielded = nil
 end
 
-function _M:takeoffObject(inven_id, item)
+function ActorInventory:takeoffObject(inven_id, item)
     inven = self:getInven(inven_id)
     if not inven then return false end
 
@@ -231,7 +235,7 @@ function _M:takeoffObject(inven_id, item)
     self:removeObject(inven, item)
 end
 
-function _M:doTakeoff(inven, item, o)
+function ActorInventory:doTakeoff(inven, item, o)
     if not self:canAddToInven(self.INVEN_INVEN) then return end
 
     self:takeoffObject(inven, item)
@@ -239,7 +243,7 @@ function _M:doTakeoff(inven, item, o)
 end
 
 
-function _M:dropFloor(inven, item)
+function ActorInventory:dropFloor(inven, item)
     --print("Dropping", inven, item)
     local inv = self:getInven(inven)
     --print("Inventory is", inv)
@@ -257,4 +261,4 @@ function _M:dropFloor(inven, item)
     logMessage(colors.WHITE, "Dropping "..o:getName())
 end
 
-return _M
+return ActorInventory
